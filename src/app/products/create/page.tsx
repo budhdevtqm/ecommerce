@@ -3,15 +3,9 @@ import React, { useState } from "react";
 import FormCard from "@/components/FormCard";
 import Button from "@/components/Button";
 import FileCard from "../FileCard";
-
-interface File {
-  lastModified: number;
-  lastModifiedDate: Date;
-  name: string;
-  size: number;
-  type: string;
-  webkitRelativePath: string;
-}
+import { ProductValues, File } from "@/app/redux/productsSlice";
+import { validateProduct } from "@/common-utils/validations";
+import FormError from "@/components/FormError";
 
 const categoreis = [
   {
@@ -64,18 +58,19 @@ const categoreis = [
   },
 ];
 
-const CreateProduct = () => {
-  const [files, setFiles] = useState<File[] | []>([]);
-  const [formValues, setFormValues] = useState({
-    name: "",
-    price: 0,
-    quantity: 0,
-    store: "",
-    category: "",
-    description: "",
-  });
+const values = {
+  name: "",
+  price: "",
+  quantity: "",
+  category: "",
+  description: "",
+  images: [],
+};
 
-  console.log("files", Object.values(files));
+const AddProduct = () => {
+  const [files, setFiles] = useState<File[] | []>([]);
+  const [formValues, setFormValues] = useState<ProductValues>(values);
+  const [errors, setErrors] = useState<Partial<ProductValues>>(values);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -95,7 +90,14 @@ const CreateProduct = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Create-Product-values", formValues);
+
+    const validationResults = validateProduct({ ...formValues, images: files });
+    if (Object.keys(validationResults).length > 0) {
+      setErrors(validationResults);
+      return;
+    }
+
+    console.log("Create-Product-no-er");
   };
   return (
     <FormCard title="Add Product" navigate="/products">
@@ -110,7 +112,7 @@ const CreateProduct = () => {
             onChange={handleChange}
             value={formValues.name}
           />
-          <p className="text-red-500 text-[12px] ml-2">Error</p>
+          <FormError message={errors.name || ""} />
         </div>
         <div className="flex flex-col gap-1 my-3">
           <label className="ml-1 text-gray-500 ">Price</label>
@@ -122,7 +124,7 @@ const CreateProduct = () => {
             onChange={handleChange}
             value={formValues.price}
           />
-          <p className="text-red-500 text-[12px] ml-2">Error</p>
+          <FormError message={errors.price || ""} />
         </div>
         <div className="flex flex-col gap-1 my-3">
           <label className="ml-1 text-gray-500 ">Quantity</label>
@@ -134,7 +136,7 @@ const CreateProduct = () => {
             onChange={handleChange}
             value={formValues.quantity}
           />
-          <p className="text-red-500 text-[12px] ml-2">Error</p>
+          <FormError message={errors.quantity || ""} />
         </div>
         <div className="flex flex-col gap-1 my-3">
           <label className="ml-1 text-gray-500">Category</label>
@@ -151,7 +153,7 @@ const CreateProduct = () => {
               </option>
             ))}
           </select>
-          <p className="text-red-500 text-[12px] ml-2">Error</p>
+          <FormError message={errors.category || ""} />
         </div>
         <div className="flex flex-col gap-1 my-3">
           <label className="ml-1 text-gray-500">Description</label>
@@ -164,10 +166,10 @@ const CreateProduct = () => {
             placeholder="Please enter product description...."
             className="border-2 py-1 px-2 outline-primary text-black rounded-lg"
           ></textarea>
-          <p className="text-red-500 text-[12px] ml-2">Error</p>
+          <FormError message={errors.description || ""} />
         </div>
 
-        <div className="flex items-center justify-center w-full">
+        <div className="flex flex-col  w-full">
           <label
             htmlFor="dropzone-file"
             className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -205,6 +207,8 @@ const CreateProduct = () => {
               onChange={handleFileChange}
             />
           </label>
+
+          <FormError message={(errors.images as string) || ("" as string)} />
         </div>
         {files.length > 0 && (
           <div className="grid grid-rows-1 grid-cols-4 my-4 gap-4">
@@ -223,4 +227,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default AddProduct;

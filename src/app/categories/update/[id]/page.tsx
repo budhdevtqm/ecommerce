@@ -1,30 +1,44 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import FormCard from "@/components/FormCard";
 import Button from "@/components/Button";
+import FormError from "@/components/FormError";
+import { CategoryValues } from "@/app/redux/categorySlice";
+import { validateCategory } from "@/common-utils/validations";
 
 const UpdateCategory: React.FC = () => {
-  const [formValues, setFormValues] = useState({ name: "" });
+  const [formValues, setFormValues] = useState<CategoryValues>({ name: "" });
+  const [errors, setErrors] = useState<Partial<CategoryValues>>({ name: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
-  
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const validationResults = validateCategory(formValues);
+    if (Object.keys(validationResults).length > 0) {
+      setErrors(validationResults);
+      return;
+    }
+    console.log("add-cat-no err");
+  };
   return (
     <FormCard title="Update Category" navigate="/categories">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-1 my-3">
           <label className="ml-1 text-gray-500 ">Name</label>
           <input
             type="text"
             name="name"
-            placeholder="Your name!"
+            placeholder="Category name!"
             className="border-2 py-1 px-2 outline-primary text-black rounded-lg"
             onChange={handleChange}
             value={formValues.name}
           />
-          <p className="text-red-500 text-[12px] ml-2">Error</p>
+          <FormError message={errors.name ?? ""} />
         </div>
         <div className="flex items-center justify-center">
           <Button type="submit" variant="primary">
