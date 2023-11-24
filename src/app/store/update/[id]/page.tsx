@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import FormCard from "@/components/FormCard";
-import Button from "@/components/Button";
+import FormCard from "@/app/components/FormCard";
+import Button from "@/app/components/Button";
 
 const users = [
   { _id: "2312341324", name: "Admin" },

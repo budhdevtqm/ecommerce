@@ -1,7 +1,7 @@
 "use client";
-import { validateUserProfileForm } from "@/common-utils/validations";
-import Button from "@/components/Button";
-import FormError from "@/components/FormError";
+import { validateUserProfileForm } from "@/app/common-utils/validations";
+import Button from "@/app/components/Button";
+import FormError from "@/app/components/FormError";
 import React, { useState } from "react";
 import { ProfileValidation } from "../redux/userSlice";
 

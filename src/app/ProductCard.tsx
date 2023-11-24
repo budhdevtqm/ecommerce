@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { adjustProductName } from "../common-utils/common-fns";
+import { adjustProductName } from "./common-utils/common-fns";
 import { FaCartPlus } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
 import Link from "next/link";

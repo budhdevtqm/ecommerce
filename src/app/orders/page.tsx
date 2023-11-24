@@ -1,6 +1,6 @@
 import React from "react";
-import Wrapper from "../../components/Wrapper";
-import PageHeader from "../../components/PageHeader";
+import Wrapper from "../components/Wrapper";
+import PageHeader from "../components/PageHeader";
 import Link from "next/link";
 import Image from "next/image";
 import { MdDelete, MdEdit, MdInfo } from "react-icons/md";

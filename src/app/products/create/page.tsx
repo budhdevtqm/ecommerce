@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import FormCard from "@/components/FormCard";
-import Button from "@/components/Button";
+import FormCard from "@/app/components/FormCard";
+import Button from "@/app/components/Button";
 import FileCard from "../FileCard";
 import { ProductValues, File } from "@/app/redux/productsSlice";
-import { validateProduct } from "@/common-utils/validations";
-import FormError from "@/components/FormError";
+import { validateProduct } from "@/app/common-utils/validations";
+import FormError from "@/app/components/FormError";
 
 const categoreis = [
   {

@@ -1,5 +1,5 @@
 "use client";
-import Wrapper from "@/components/Wrapper";
+import Wrapper from "@/app/components/Wrapper";
 import React, { useState } from "react";
 import ImageSlider from "./ImageSlider";
 import Image from "next/image";

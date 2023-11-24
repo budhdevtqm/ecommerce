@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
-import Wrapper from "../../components/Wrapper";
-import PageHeader from "../../components/PageHeader";
+import Wrapper from "../components/Wrapper";
+import PageHeader from "../components/PageHeader";
 import { MdInfo, MdEdit, MdDelete } from "react-icons/md";
-import { getDate, getTime } from "../../common-utils/common-fns";
+import { getDate, getTime } from "../common-utils/common-fns";
 import Link from "next/link";
 import Image from "next/image";
 import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
-import IamgeGallery from "../../components/ImageSlider";
+import IamgeGallery from "../components/ImageSlider";
 
 const products = [
   {

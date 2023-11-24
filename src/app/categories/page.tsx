@@ -1,9 +1,9 @@
 import React from "react";
-import Wrapper from "../../components/Wrapper";
-import PageHeader from "../../components/PageHeader";
+import Wrapper from "../components/Wrapper";
+import PageHeader from "../components/PageHeader";
 import { MdInfo, MdEdit, MdDelete } from "react-icons/md";
 import Link from "next/link";
-import { getDate, getTime } from "../../common-utils/common-fns";
+import { getDate, getTime } from "../common-utils/common-fns";
 
 const categoreis = [
   {

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Wrapper from "@/components/Wrapper";
+import Wrapper from "@/app/components/Wrapper";
 
 const cartItems = [
   {

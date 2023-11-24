@@ -1,5 +1,5 @@
 import React from "react";
-import Wrapper from "@/components/Wrapper";
+import Wrapper from "@/app/components/Wrapper";
 import Image from "next/image";
 import { MdArrowBackIosNew } from "react-icons/md";
 import Link from "next/link";

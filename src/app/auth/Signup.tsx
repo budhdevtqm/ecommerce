@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import Button from "../../components/Button";
+import Button from "../components/Button";
 import { SignupValues, toggleAuthMode } from "../redux/authSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { validateSignup } from "@/common-utils/validations";
-import FormError from "@/components/FormError";
+import { validateSignup } from "@/app/common-utils/validations";
+import FormError from "@/app/components/FormError";
+import axios from "axios";
 
 const values = {
   name: "",
@@ -34,8 +35,10 @@ const Signup: React.FC = () => {
       setErrors(validationResults);
       return;
     }
+    const response = await axios.post("/api/users/signup", formValues);
 
-    console.log("signup-no-er");
+
+    console.log("response", response);
   };
 
   return (
@@ -46,11 +49,11 @@ const Signup: React.FC = () => {
       <div className="mt-4 w-[70%] mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1 my-3">
-            <label className="ml-1 text-gray-500 ">Email</label>
+            <label className="ml-1 text-gray-500 ">Name</label>
             <input
               type="text"
               name="name"
-              placeholder="Your email!"
+              placeholder="Your name!"
               className="py-1 px-2 outline-primary text-black rounded-xl border-2"
               onChange={handleChange}
               value={formValues.name}

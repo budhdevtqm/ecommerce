@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import FormCard from "@/components/FormCard";
-import Button from "@/components/Button";
-import FormError from "@/components/FormError";
+import FormCard from "@/app/components/FormCard";
+import Button from "@/app/components/Button";
+import FormError from "@/app/components/FormError";
 import { CategoryValues } from "@/app/redux/categorySlice";
-import { validateCategory } from "@/common-utils/validations";
+import { validateCategory } from "@/app/common-utils/validations";
 
 const UpdateCategory: React.FC = () => {
   const [formValues, setFormValues] = useState<CategoryValues>({ name: "" });

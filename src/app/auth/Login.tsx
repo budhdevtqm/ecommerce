@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import Button from "../../components/Button";
+import Button from "../components/Button";
 import { LoginValues, toggleAuthMode } from "../redux/authSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import FormError from "@/components/FormError";
-import { validateLogin } from "@/common-utils/validations";
+import FormError from "@/app/components/FormError";
+import { validateLogin } from "@/app/common-utils/validations";
 
 const values = {
   email: "",

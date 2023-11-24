@@ -1,6 +1,6 @@
 "use client";
 import { useAppDispatch } from "../redux/hooks";
-import { verifyStatus, successToast } from "../../common-utils/notification";
+import { verifyStatus, successToast } from "../common-utils/notification";
 // import { useNavigate } from "react-router-dom";
 
 const usePost = () => {

@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import Wrapper from "../../components/Wrapper";
-import PageHeader from "../../components/PageHeader";
+import Wrapper from "../components/Wrapper";
+import PageHeader from "../components/PageHeader";
 import { MdInfo, MdEdit, MdDelete } from "react-icons/md";
-import { getDate, getTime } from "../../common-utils/common-fns";
+import { getDate, getTime } from "../common-utils/common-fns";
 import Link from "next/link";
 import User from "./User";
 // import { UserInterface } from "../redux/userSlice";

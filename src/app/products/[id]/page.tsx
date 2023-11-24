@@ -1,7 +1,7 @@
 import React from "react";
-import ImageSlider from "@/components/ImageSlider";
-import PageHeader from "@/components/PageHeader";
-import Wrapper from "@/components/Wrapper";
+import ImageSlider from "@/app/components/ImageSlider";
+import PageHeader from "@/app/components/PageHeader";
+import Wrapper from "@/app/components/Wrapper";
 
 const ViewProduct: React.FC = () => {
   const product = {

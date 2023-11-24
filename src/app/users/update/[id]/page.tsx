@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { UserValues } from "@/app/redux/userSlice";
-import { userRoles } from "@/common-utils/common-vars";
-import Button from "@/components/Button";
-import FormCard from "@/components/FormCard";
-import { validateUser } from "@/common-utils/validations";
-import FormError from "@/components/FormError";
+import { userRoles } from "@/app/common-utils/common-vars";
+import Button from "@/app/components/Button";
+import FormCard from "@/app/components/FormCard";
+import { validateUser } from "@/app/common-utils/validations";
+import FormError from "@/app/components/FormError";
 
 const values = {
   name: "",
