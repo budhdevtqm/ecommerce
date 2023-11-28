@@ -29,15 +29,28 @@ const initialState: AuthInitials = {
   authMode: "login",
 };
 
-export const handleLogin = createAsyncThunk("/login", async (values) => {
-  try {
-  } catch (er) {}
-});
+export const handleLogin = createAsyncThunk(
+  "/login",
+  async (values: LoginValues, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/users/login", values);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
 
 export const handleSignup = createAsyncThunk(
   "/signup",
-  async (values, { rejectWithValue }) => {
+  async (values: SignupValues, { rejectWithValue }) => {
     try {
+      const response = await axios.post("/api/users/signup", values);
+      return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {
         return rejectWithValue(er.response?.data);
@@ -52,6 +65,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    handleLogout: (state) => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+    },
     toggleAuthMode: (state, action) => {
       state.authMode = action.payload;
     },
@@ -59,5 +76,5 @@ const authSlice = createSlice({
   extraReducers: (builder) => {},
 });
 
-export const { toggleAuthMode } = authSlice.actions;
+export const { toggleAuthMode, handleLogout } = authSlice.actions;
 export default authSlice.reducer;

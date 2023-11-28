@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import Button from "../components/Button";
-import { LoginValues, toggleAuthMode } from "../redux/authSlice";
+import { LoginValues, handleLogin, toggleAuthMode } from "../redux/authSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import FormError from "@/app/components/FormError";
 import { validateLogin } from "@/app/common-utils/validations";
+import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const values = {
   email: "",
@@ -15,6 +17,7 @@ const Login: React.FC = () => {
   const [formValues, setFormValues] = useState<LoginValues>(values);
   const [errors, setErrors] = useState<Partial<LoginValues>>(values);
 
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const authMode = useAppSelector((state) => state.auth.authMode);
 
@@ -26,14 +29,25 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors(values);
-
     const validationResults = validateLogin(formValues);
     if (Object.keys(validationResults).length > 0) {
       setErrors(validationResults);
       return;
     }
 
-    console.log("login-no-er");
+    const res: any = await dispatch(handleLogin(formValues));
+
+    if (res.type.includes("fulfilled")) {
+      const { token, role, message } = res.payload.data.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      toast.success(message, { position: "top-right" });
+      setTimeout(() => router.push("/"), 1000);
+      return;
+    }
+    if (res.type.includes("rejected")) {
+      toast.error(res.payload.error.message, { position: "top-right" });
+    }
   };
 
   return (
@@ -81,6 +95,7 @@ const Login: React.FC = () => {
           ? "New user, Please signup ?"
           : "Already have account, Please login"}
       </p>
+      <Toaster />
     </div>
   );
 };

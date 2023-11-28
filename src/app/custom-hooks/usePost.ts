@@ -8,13 +8,13 @@ const usePost = () => {
   const create = async (fn: any, values: any) => {
     const response = await dispatch(fn(values));
 
-    if (response.type?.includes("fulfilled")) {
-      successToast("create");
-      return;
-    }
-    if (response.type?.includes("rejected")) {
-      verifyStatus(response.payload.status);
-    }
+    // if (response.type?.includes("fulfilled")) {
+    //   successToast("create");
+    //   return;
+    // }
+    // if (response.type?.includes("rejected")) {
+    //   verifyStatus(response.payload.status);
+    // }
   };
 
   return { create };

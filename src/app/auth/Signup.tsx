@@ -5,7 +5,9 @@ import { SignupValues, toggleAuthMode } from "../redux/authSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { validateSignup } from "@/app/common-utils/validations";
 import FormError from "@/app/components/FormError";
-import axios from "axios";
+import { handleSignup } from "../redux/authSlice";
+import { useRouter } from "next/navigation";
+import { toast, Toaster } from "react-hot-toast";
 
 const values = {
   name: "",
@@ -19,6 +21,7 @@ const Signup: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const authMode = useAppSelector((state) => state.auth.authMode);
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,16 +32,26 @@ const Signup: React.FC = () => {
     e.preventDefault();
 
     setErrors(values);
-
     const validationResults = validateSignup(formValues);
     if (Object.keys(validationResults).length > 0) {
       setErrors(validationResults);
       return;
     }
-    const response = await axios.post("/api/users/signup", formValues);
 
+    const res: any = await dispatch(handleSignup(formValues));
 
-    console.log("response", response);
+    if (res.type.includes("fulfilled")) {
+      toast.success("Signup successfully.", { position: "top-right" });
+      setTimeout(() => dispatch(toggleAuthMode("login")), 1000);
+      return;
+    }
+
+    if (res.type.includes("rejected")) {
+      toast.error(res?.payload?.error?.message, {
+        position: "top-right",
+        duration: 2000,
+      });
+    }
   };
 
   return (
@@ -97,6 +110,7 @@ const Signup: React.FC = () => {
           ? "New user, Please signup ?"
           : "Already have account, Please login"}
       </p>
+      <Toaster />
     </div>
   );
 };

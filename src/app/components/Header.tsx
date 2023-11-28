@@ -4,10 +4,19 @@ import Navbar from "./Navbar";
 import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import Button from "./Button";
+import { handleLogout } from "../redux/authSlice";
+import { useAppDispatch } from "../redux/hooks";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Header: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const handleClick = () => {
-    console.log("logout-handler");
+    dispatch(handleLogout());
+    toast.success("logout successfuly", { position: "top-right" });
+    router.push("/auth");
   };
 
   return (
@@ -37,7 +46,9 @@ const Header: React.FC = () => {
           </Link>
         </div>
 
-        <Button variant="primary">Logout</Button>
+        <Button onClick={handleClick} variant="primary">
+          Logout
+        </Button>
       </div>
     </header>
   );

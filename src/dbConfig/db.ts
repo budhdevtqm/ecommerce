@@ -1,12 +1,23 @@
-const mysql = require("mysql");
+const mysql = require('mysql2/promise');
+
 require("dotenv").config();
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DATABASE,
-});
+// const connection = async() => {
+//   await mysql.createConnection(
+//     {host: process.env.DB_HOST,
+//       user: process.env.DB_USER,
+//       password: process.env.DB_PASSWORD,
+//       database: process.env.DATABASE,
+//   });
+// } 
+  // query database
+
+// const pool = mysql.createPool({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DATABASE,
+// });
 
 // const connection = async () => {
 // try {
@@ -24,4 +35,13 @@ const connection = mysql.createConnection({
 // }
 // };
 
-export default connection;
+// export default pool;
+
+
+import { createPool } from "mysql2/promise";
+ const pool = createPool({host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DATABASE,
+});
+export default pool
