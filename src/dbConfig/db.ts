@@ -1,6 +1,12 @@
-const mysql = require('mysql2/promise');
+import { createPool } from "mysql2/promise";
 
-require("dotenv").config();
+const pool = createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DATABASE,
+});
+
 
 // const connection = async() => {
 //   await mysql.createConnection(
@@ -9,8 +15,8 @@ require("dotenv").config();
 //       password: process.env.DB_PASSWORD,
 //       database: process.env.DATABASE,
 //   });
-// } 
-  // query database
+// }
+// query database
 
 // const pool = mysql.createPool({
 //   host: process.env.DB_HOST,
@@ -38,10 +44,5 @@ require("dotenv").config();
 // export default pool;
 
 
-import { createPool } from "mysql2/promise";
- const pool = createPool({host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DATABASE,
-});
-export default pool
+
+export default pool;

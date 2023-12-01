@@ -33,7 +33,7 @@ export const handleLogin = createAsyncThunk(
   "/login",
   async (values: LoginValues, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/users/login", values);
+      const response = await axios.post("/api/auth/login", values);
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {
@@ -49,7 +49,7 @@ export const handleSignup = createAsyncThunk(
   "/signup",
   async (values: SignupValues, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/users/signup", values);
+      const response = await axios.post("/api/auth/signup", values);
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

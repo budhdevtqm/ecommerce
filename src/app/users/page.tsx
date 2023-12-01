@@ -1,119 +1,137 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import Wrapper from "../components/Wrapper";
 import PageHeader from "../components/PageHeader";
 import { MdInfo, MdEdit, MdDelete } from "react-icons/md";
 import { getDate, getTime } from "../common-utils/common-fns";
 import Link from "next/link";
 import User from "./User";
+import useFetch from "../custom-hooks/useFetch";
+import { FetchedUser, getAllUsers } from "../redux/userSlice";
+import { Metadata } from "next";
+import { useAppSelector } from "../redux/hooks";
 // import { UserInterface } from "../redux/userSlice";
 
-const users = [
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: false,
-  },
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: false,
-  },
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: true,
-  },
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: true,
-  },
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: true,
-  },
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: false,
-  },
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: false,
-  },
-  ,
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: true,
-  },
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: true,
-  },
-  {
-    _id: "1",
-    email: "hello@gmail.com",
-    name: "User",
-    image: "",
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    role: "admin",
-    status: true,
-  },
-];
+// const users = [
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: false,
+//   },
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: false,
+//   },
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: true,
+//   },
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: true,
+//   },
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: true,
+//   },
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: false,
+//   },
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: false,
+//   },
+//   ,
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: true,
+//   },
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: true,
+//   },
+//   {
+//     _id: "1",
+//     email: "hello@gmail.com",
+//     name: "User",
+//     image: "",
+//     createdAt: new Date().getTime(),
+//     updatedAt: new Date().getTime(),
+//     role: "admin",
+//     status: true,
+//   },
+// ];
+
+const metadata: Metadata = {
+  title: "Users page",
+};
 
 const Users: React.FC = () => {
-    return (
+  const { handleFetch } = useFetch();
+  const users = useAppSelector((state) => state.users.users) as
+    | FetchedUser[]
+    | [];
+  console.log("users-----", users);
+
+  useEffect(() => {
+    handleFetch(getAllUsers);
+  }, []);
+
+  return (
     <Wrapper>
       <PageHeader title="Users" navigate="/users/create" />
       <div className="my-8 p-2 border-t-2 border-primary">
@@ -173,7 +191,7 @@ const Users: React.FC = () => {
                   </p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {user.status ? (
+                  {user.status == "1" ? (
                     <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                       <span
                         aria-hidden
