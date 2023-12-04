@@ -7,11 +7,9 @@ export const middleware = async (req: NextRequest) => {
   const role = await cookies().get("role")?.value;
   const pathname = req.nextUrl.pathname;
 
-  // console.log(role, "<=role :: token=>", token);
+  const isValidToken = await isAuth(token!);
 
-  // const isValidToken =  isAuth(token!);
-
-  // console.log("isValidToken", isValidToken);
+  console.log("isValidToken", isValidToken);
 
   // if (pathname.includes("/users/")) {
   //   console.log("im here");

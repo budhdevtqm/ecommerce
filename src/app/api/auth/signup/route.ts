@@ -19,7 +19,7 @@ type QueryResultType = [
   FieldPacket[]
 ];
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
+export const POST = async (req: NextRequest) => {
   try {
     const { email, password, name } = await req.json();
     const [results]: QueryResultType = await pool.query(

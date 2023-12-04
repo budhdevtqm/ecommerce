@@ -2,130 +2,25 @@
 import React, { useEffect } from "react";
 import Wrapper from "../components/Wrapper";
 import PageHeader from "../components/PageHeader";
-import { MdInfo, MdEdit, MdDelete } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
 import { getDate, getTime } from "../common-utils/common-fns";
 import Link from "next/link";
-import User from "./User";
 import useFetch from "../custom-hooks/useFetch";
-import { FetchedUser, getAllUsers } from "../redux/userSlice";
-import { Metadata } from "next";
+import { FetchedUser, deleteUser, getAllUsers } from "../redux/userSlice";
 import { useAppSelector } from "../redux/hooks";
-// import { UserInterface } from "../redux/userSlice";
-
-// const users = [
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: false,
-//   },
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: false,
-//   },
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: true,
-//   },
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: true,
-//   },
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: true,
-//   },
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: false,
-//   },
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: false,
-//   },
-//   ,
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: true,
-//   },
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: true,
-//   },
-//   {
-//     _id: "1",
-//     email: "hello@gmail.com",
-//     name: "User",
-//     image: "",
-//     createdAt: new Date().getTime(),
-//     updatedAt: new Date().getTime(),
-//     role: "admin",
-//     status: true,
-//   },
-// ];
-
-const metadata: Metadata = {
-  title: "Users page",
-};
+import useDelete from "../custom-hooks/useDelete";
 
 const Users: React.FC = () => {
   const { handleFetch } = useFetch();
+  const handleDelete = useDelete();
   const users = useAppSelector((state) => state.users.users) as
     | FetchedUser[]
     | [];
-  console.log("users-----", users);
+
+  const deleteHandler = async (id: string) => {
+    await handleDelete(deleteUser, id);
+    await handleFetch(getAllUsers);
+  };
 
   useEffect(() => {
     handleFetch(getAllUsers);
@@ -221,12 +116,12 @@ const Users: React.FC = () => {
                       onClick={() => viewUserHandler(user)}
                     /> */}
 
-                    <Link href={`/users/update/${user._id}`}>
+                    <Link href={`/users/update/${user.id}`}>
                       <MdEdit title="Edit" />
                     </Link>
                     <MdDelete
                       title="Delete"
-                      // onClick={() => deleteHandler(user._id as String)}
+                      onClick={() => deleteHandler(user.id as string)}
                     />
                   </span>
                 </td>

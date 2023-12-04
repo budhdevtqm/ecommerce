@@ -9,7 +9,6 @@ const useFetch = () => {
     const response = await disptach(fn());
 
     if (response.type?.includes("rejected")) {
-      // verifyStatus(response.payload.status);
       console.log("rejected");
       return;
     }
@@ -20,7 +19,6 @@ const useFetch = () => {
   const fetchById = async (fn: any, id: string) => {
     const response = await disptach(fn(id));
     if (response.type?.includes("rejected")) {
-      // verifyStatus(response.payload.status);
       return;
     }
   };

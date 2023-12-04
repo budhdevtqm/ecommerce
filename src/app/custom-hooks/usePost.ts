@@ -1,20 +1,14 @@
 "use client";
 import { useAppDispatch } from "../redux/hooks";
-import { verifyStatus, successToast } from "../common-utils/notification";
-// import { useNavigate } from "react-router-dom";
+import useNotify from "./useNotifty";
 
 const usePost = () => {
   const dispatch = useAppDispatch();
-  const create = async (fn: any, values: any) => {
-    const response = await dispatch(fn(values));
+  const { checkStatus } = useNotify();
 
-    // if (response.type?.includes("fulfilled")) {
-    //   successToast("create");
-    //   return;
-    // }
-    // if (response.type?.includes("rejected")) {
-    //   verifyStatus(response.payload.status);
-    // }
+  const create = async (fn: any, values: any, path: string, prefix: string) => {
+    const response = await dispatch(fn(values));
+    checkStatus(response, path, prefix, "added");
   };
 
   return { create };

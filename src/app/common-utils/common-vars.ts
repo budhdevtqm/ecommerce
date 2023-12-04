@@ -5,7 +5,7 @@ interface Header {
 const token =
   typeof window !== "undefined" ? localStorage.getItem("token") : "";
 
-export const userRoles = ["customer", "seller", "admin"];
+export const userRoles = ["user", "seller", "admin"];
 
 export const passwordRegex =
   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\S+$).{8,}$/;

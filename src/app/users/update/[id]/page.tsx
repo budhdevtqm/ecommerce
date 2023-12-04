@@ -1,11 +1,19 @@
 "use client";
-import React, { useState } from "react";
-import { UserValues } from "@/app/redux/userSlice";
+import React, { useEffect, useState } from "react";
+import {
+  FetchedUser,
+  UserValues,
+  fetchUser,
+  updateUser,
+} from "@/app/redux/userSlice";
 import { userRoles } from "@/app/common-utils/common-vars";
 import Button from "@/app/components/Button";
 import FormCard from "@/app/components/FormCard";
 import { validateUser } from "@/app/common-utils/validations";
 import FormError from "@/app/components/FormError";
+import { useParams } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+import usePatch from "@/app/custom-hooks/usePatch";
 
 const values = {
   name: "",
@@ -18,6 +26,13 @@ const UpdateUserForm = () => {
   const [formValues, setFormValues] = useState<UserValues>(values);
   const [errors, setErrors] = useState<Partial<UserValues>>(values);
 
+  const { update } = usePatch();
+  const userId = useParams().id;
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(
+    (state) => state.users.user
+  ) as FetchedUser | null;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
@@ -28,16 +43,27 @@ const UpdateUserForm = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationResults = validateUser(formValues);
-    if (Object.keys.length > 0) {
+    if (Object.keys(validationResults).length > 0) {
       setErrors(validationResults);
       return;
     }
-    console.log("update-user-no-er");
+    await update(updateUser, { ...formValues, id: userId });
   };
+
+  useEffect(() => {
+    dispatch(fetchUser(userId as string));
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const { name, email, password, role } = user;
+      setFormValues({ name, email, password, role });
+    }
+  }, [user]);
 
   return (
     <FormCard title="Update User" navigate="/users">
@@ -63,6 +89,7 @@ const UpdateUserForm = () => {
             className="border-2 py-1 px-2 outline-primary text-black rounded-lg"
             onChange={handleChange}
             value={formValues.email}
+            disabled
           />
           <FormError message={errors?.email ?? ""} />
         </div>
@@ -71,7 +98,7 @@ const UpdateUserForm = () => {
           <input
             type="password"
             name="password"
-            placeholder="Your password!"
+            placeholder="update password!"
             className="border-2 py-1 px-2 outline-primary text-black rounded-lg"
             onChange={handleChange}
             value={formValues.password}

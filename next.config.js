@@ -6,7 +6,7 @@ const nextConfig = {
     DB_USER: "root",
     DATABASE: "eCommerce",
     ACCESS_TOKEN_SECRET:
-      "426f1c2a47930e4fb320f632cf00ec77e9167a2d347ebea002679e8b218caca0288a8dba41176981a32773ce1e5c90280c3fa7d2042062a0bf99c174808856d5",
+      "ab7a3de3ac0d63336ce98315661611122168743addab37cc27282351c6417bf0",
   },
   devIndicators: {
     buildActivityPosition: "bottom-right",

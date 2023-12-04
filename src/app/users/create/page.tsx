@@ -1,11 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { UserValues } from "@/app/redux/userSlice";
+import { UserValues, addUser } from "@/app/redux/userSlice";
 import { userRoles } from "@/app/common-utils/common-vars";
 import Button from "@/app/components/Button";
 import FormCard from "@/app/components/FormCard";
 import { validateUser } from "@/app/common-utils/validations";
 import FormError from "@/app/components/FormError";
+import usePost from "@/app/custom-hooks/usePost";
+import { Toaster } from "react-hot-toast";
 
 const values = {
   name: "",
@@ -17,6 +19,7 @@ const values = {
 const CreateUserForm = () => {
   const [formValues, setFormValues] = useState<UserValues>(values);
   const [errors, setErrors] = useState<Partial<UserValues>>(values);
+  const { create } = usePost();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,15 +31,15 @@ const CreateUserForm = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationResults = validateUser(formValues);
-    if (Object.keys.length > 0) {
+    if (Object.keys(validationResults).length > 0) {
       setErrors(validationResults);
       return;
     }
-    console.log("add-user-no-er");
+    await create(addUser, formValues, "/users", "User");
   };
 
   return (
@@ -99,6 +102,7 @@ const CreateUserForm = () => {
           </Button>
         </div>
       </form>
+      <Toaster />
     </FormCard>
   );
 };
