@@ -1,7 +1,7 @@
 import pool from "@/dbConfig/db";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import * as jose from "jose";
 import {
   RowDataPacket,
   FieldPacket,
@@ -21,7 +21,7 @@ type QueryResultType = [
   FieldPacket[]
 ];
 
-export const POST = async (req: NextRequest, res: NextResponse) => {
+export const POST = async (req: NextRequest) => {
   try {
     const { email, password } = await req.json();
 
@@ -56,20 +56,18 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
         ? results[0].role
         : "";
 
-    const userId =
+    const userEmail =
       Array.isArray(results) && results.length !== 0 && "password" in results[0]
-        ? results[0].id
+        ? results[0].email
         : "";
 
-    const token = await jwt.sign(
-      { userId, userRole },
-      process.env.ACCESS_TOKEN_SECRET!,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const secret = new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET!);
+    const jwt = await new jose.SignJWT({ userEmail, userRole })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime("1h")
+      .sign(secret);
 
-    cookies().set("token", token, {
+    cookies().set("token", jwt, {
       httpOnly: true,
     });
     cookies().set("role", userRole, {

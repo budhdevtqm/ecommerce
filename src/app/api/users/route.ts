@@ -2,7 +2,7 @@ import pool from "@/dbConfig/db";
 import { RowDataPacket } from "mysql2";
 import { NextResponse, NextRequest } from "next/server";
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
   try {
     const [rows] = await pool.query("SELECT * FROM users");
     const rowData: RowDataPacket[] = rows as RowDataPacket[];

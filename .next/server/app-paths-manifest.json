@@ -1,5 +1,8 @@
 {
-  "/users/page": "app/users/page.js",
-  "/api/user/[id]/route": "app/api/user/[id]/route.js",
-  "/api/users/route": "app/api/users/route.js"
+  "/not-found": "app/not-found.js",
+  "/auth/page": "app/auth/page.js",
+  "/page": "app/page.js",
+  "/categories/page": "app/categories/page.js",
+  "/categories/create/page": "app/categories/create/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
 }

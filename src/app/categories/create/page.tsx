@@ -3,19 +3,21 @@ import React, { useState } from "react";
 import FormCard from "@/app/components/FormCard";
 import Button from "@/app/components/Button";
 import FormError from "@/app/components/FormError";
-import { CategoryValues } from "@/app/redux/categorySlice";
+import { CategoryValues, addCategory } from "@/app/redux/categorySlice";
 import { validateCategory } from "@/app/common-utils/validations";
+import usePost from "@/app/custom-hooks/usePost";
 
 const CreateCategory: React.FC = () => {
   const [formValues, setFormValues] = useState<CategoryValues>({ name: "" });
   const [errors, setErrors] = useState<Partial<CategoryValues>>({ name: "" });
+  const { create } = usePost();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationResults = validateCategory(formValues);
@@ -23,11 +25,11 @@ const CreateCategory: React.FC = () => {
       setErrors(validationResults);
       return;
     }
-    console.log("add-cat-no err");
+    await create(addCategory, formValues, "/categories", "Category");
   };
   return (
     <FormCard title="Create Category" navigate="/categories">
-      <form onSubmit={handleSubmit}> 
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-1 my-3">
           <label className="ml-1 text-gray-500 ">Name</label>
           <input

@@ -1,21 +1,44 @@
-import { NextResponse, NextRequest } from "next/server";
-import { cookies } from "next/headers";
-import { isAuth } from "./helpers/customMiddlewares";
+import { NextRequest, NextResponse } from "next/server";
+import * as jose from "jose";
 
-export const middleware = async (req: NextRequest) => {
-  const token = await cookies().get("token")?.value;
-  const role = await cookies().get("role")?.value;
-  const pathname = req.nextUrl.pathname;
+export interface JwtError {
+  code: string;
+  name: string;
+  claim: string;
+  reason: string;
+}
 
-  const isValidToken = await isAuth(token!);
+export interface JwtUserInfo {
+  userEmail: string;
+  userRole: string;
+  exp: number;
+}
 
-  console.log("isValidToken", isValidToken);
+export async function middleware(request: NextRequest) {
+  const { url, nextUrl, cookies } = request;
+  const { pathname } = nextUrl;
+  try {
+    const token = cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.redirect(new URL("/auth", url));
+    }
 
-  // if (pathname.includes("/users/")) {
-  //   console.log("im here");
-  // }
-};
+    const secret = new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET!);
+    const { payload } = await jose.jwtVerify(token, secret);
+    const { userRole, userEmail } = payload;
+
+    if (pathname.includes("/users") && userRole === "admin") {
+      return NextResponse.next();
+    }
+
+    // if(pathname.includes("/category"))
+
+    return NextResponse.redirect(new URL("/", url));
+  } catch (error) {
+    return NextResponse.redirect(new URL("/auth", url));
+  }
+}
 
 export const config = {
-  matcher: "/users/:path*",
+  matcher: ["/users/:path*"],
 };

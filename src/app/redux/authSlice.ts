@@ -45,6 +45,23 @@ export const handleLogin = createAsyncThunk(
   }
 );
 
+export const handleLogout = createAsyncThunk(
+  "/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/auth/logout");
+      console.log("handleLogout  response", response);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
 export const handleSignup = createAsyncThunk(
   "/signup",
   async (values: SignupValues, { rejectWithValue }) => {
@@ -65,10 +82,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    handleLogout: (state) => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-    },
+    // handleLogout: (state) => {
+    //   localStorage.removeItem("token");
+    //   localStorage.removeItem("role");
+    // },
     toggleAuthMode: (state, action) => {
       state.authMode = action.payload;
     },
@@ -76,5 +93,5 @@ const authSlice = createSlice({
   extraReducers: (builder) => {},
 });
 
-export const { toggleAuthMode, handleLogout } = authSlice.actions;
+export const { toggleAuthMode } = authSlice.actions;
 export default authSlice.reducer;
