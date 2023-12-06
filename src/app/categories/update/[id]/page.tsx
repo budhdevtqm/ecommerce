@@ -1,30 +1,59 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormCard from "@/app/components/FormCard";
 import Button from "@/app/components/Button";
 import FormError from "@/app/components/FormError";
-import { CategoryValues } from "@/app/redux/categorySlice";
+import {
+  CategoryValues,
+  FetchedCategory,
+  fetchCategory,
+} from "@/app/redux/categorySlice";
 import { validateCategory } from "@/app/common-utils/validations";
+import { useParams } from "next/navigation";
+import useFetch from "@/app/custom-hooks/useFetch";
+import { useAppSelector } from "@/app/redux/hooks";
+import usePatch from "@/app/custom-hooks/usePatch";
 
 const UpdateCategory: React.FC = () => {
   const [formValues, setFormValues] = useState<CategoryValues>({ name: "" });
   const [errors, setErrors] = useState<Partial<CategoryValues>>({ name: "" });
+  const params = useParams() as { id: string };
+  const categoryId = params.id;
+  const { fetchById } = useFetch();
+  const update = usePatch();
+
+  const category = useAppSelector(
+    (state) => state.category.category
+  ) as FetchedCategory | null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    debugger;
 
     const validationResults = validateCategory(formValues);
     if (Object.keys(validationResults).length > 0) {
       setErrors(validationResults);
       return;
     }
-    console.log("add-cat-no err");
+    await update(UpdateCategory, { ...formValues, id: categoryId });
   };
+
+  useEffect(() => {
+    fetchById(fetchCategory, categoryId);
+  }, []);
+
+  useEffect(() => {
+    if (category) {
+      const { name } = category;
+      setFormValues({ name });
+    }
+  }, [category]);
+
   return (
     <FormCard title="Update Category" navigate="/categories">
       <form onSubmit={handleSubmit}>

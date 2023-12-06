@@ -70,10 +70,7 @@ export const POST = async (req: NextRequest) => {
     cookies().set("token", jwt, {
       httpOnly: true,
     });
-    cookies().set("role", userRole, {
-      httpOnly: true,
-    });
-
+  
     return NextResponse.json(
       { data: { message: "login successfully", role: userRole } },
       { status: 200 }

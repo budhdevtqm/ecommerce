@@ -5,9 +5,9 @@ const useDelete = () => {
   const disptach = useAppDispatch();
   const { checkStatus } = useNotify();
 
-  const handleDelete = async (fn: any, id: string) => {
+  const handleDelete = async (fn: any, id: number) => {
     const response = await disptach(fn(id));
-    checkStatus(response, "", "user", "deleteI");
+    checkStatus(response, "", "user", "delete");
   };
   return handleDelete;
 };

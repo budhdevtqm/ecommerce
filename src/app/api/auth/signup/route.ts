@@ -33,10 +33,10 @@ export const POST = async (req: NextRequest) => {
           error: {
             ok: false,
             message: "This email is already in use.",
-            status: 400,
+            status: 409,
           },
         },
-        { status: 400 }
+        { status: 409 }
       );
     }
 

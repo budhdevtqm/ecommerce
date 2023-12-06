@@ -27,11 +27,16 @@ export async function middleware(request: NextRequest) {
     const { payload } = await jose.jwtVerify(token, secret);
     const { userRole, userEmail } = payload;
 
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("userEmail", userEmail as string);
+
     if (pathname.includes("/users") && userRole === "admin") {
       return NextResponse.next();
     }
 
-    // if(pathname.includes("/category"))
+    if (pathname.includes("/categories") && userRole !== "user") {
+      return NextResponse.next();
+    }
 
     return NextResponse.redirect(new URL("/", url));
   } catch (error) {
@@ -40,5 +45,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/users/:path*"],
+  matcher: ["/users/:path*", "/categories/:path*"],
 };

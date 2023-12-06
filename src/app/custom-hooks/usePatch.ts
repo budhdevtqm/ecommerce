@@ -17,7 +17,7 @@ const usePatch = () => {
       //   verifyStatus(response.payload.status, navigate);
     }
   };
-  return { update };
+  return update;
 };
 
 export default usePatch;

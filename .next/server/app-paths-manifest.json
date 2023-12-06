@@ -1,8 +1,8 @@
 {
-  "/not-found": "app/not-found.js",
+  "/categories/update/[id]/page": "app/categories/update/[id]/page.js",
   "/auth/page": "app/auth/page.js",
   "/page": "app/page.js",
   "/categories/page": "app/categories/page.js",
-  "/categories/create/page": "app/categories/create/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/category/[categoryId]/route": "app/api/category/[categoryId]/route.js"
 }
