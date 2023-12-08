@@ -7,6 +7,7 @@ import {
   CategoryValues,
   FetchedCategory,
   fetchCategory,
+  upadteCategory,
 } from "@/app/redux/categorySlice";
 import { validateCategory } from "@/app/common-utils/validations";
 import { useParams } from "next/navigation";
@@ -33,14 +34,13 @@ const UpdateCategory: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    debugger;
 
     const validationResults = validateCategory(formValues);
     if (Object.keys(validationResults).length > 0) {
       setErrors(validationResults);
       return;
     }
-    await update(UpdateCategory, { ...formValues, id: categoryId });
+    await update(upadteCategory, { ...formValues, id: categoryId });
   };
 
   useEffect(() => {

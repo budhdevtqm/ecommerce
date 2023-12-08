@@ -54,3 +54,8 @@ export const successToast = (
   }
   return obj;
 };
+
+export const removeFile = (id: number, files: any) => {
+  const filtered = files.filter((file: any, index: number) => index !== id);
+  return filtered;
+};

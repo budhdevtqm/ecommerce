@@ -2,7 +2,7 @@ import { LoginValues, SignupValues } from "@/app/redux/authSlice";
 import { emailRegex, passwordRegex } from "./common-vars";
 import { UserValues, ProfileValidation } from "@/app/redux/userSlice";
 import { CategoryValues } from "@/app/redux/categorySlice";
-import { ProductValues } from "@/app/redux/productsSlice";
+import { ProductValues } from "@/app/redux/productSlice";
 
 export const validateSignup = (values: SignupValues) => {
   const { name, email, password } = values;

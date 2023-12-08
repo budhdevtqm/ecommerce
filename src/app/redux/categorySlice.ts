@@ -100,7 +100,6 @@ export const upadteCategory = createAsyncThunk(
   "/update-category",
   async (values: CategoryValues, { rejectWithValue }) => {
     try {
-      console.log("im-here");
       const { name, id } = values;
       const response = await axios.patch(`/api/category/${id}`, {
         name,

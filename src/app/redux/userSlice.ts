@@ -40,7 +40,7 @@ export const getAllUsers = createAsyncThunk(
   "/get-all-users",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("api/users");
+      const response = await axios.get("api/user");
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

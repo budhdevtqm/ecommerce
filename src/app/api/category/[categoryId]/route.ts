@@ -57,7 +57,6 @@ export const DELETE = async (req: NextRequest) => {
 
 export const PATCH = async (req: NextRequest) => {
   try {
-    console.log("body", await req.json());
     const pathname = req.nextUrl.pathname;
     const categoryId = pathname.split("/").at(-1);
     const { name, userEmail } = await req.json();
@@ -66,24 +65,24 @@ export const PATCH = async (req: NextRequest) => {
       userEmail,
     ]);
 
-    const [allCategory] = await pool.query(
+    const [categories] = await pool.query(
       "SELECT * FROM categories WHERE name=?",
       [name]
     );
 
-    if ((allCategory as Category[] | []).length > 1) {
+    const userId = (users as UserInterface[])[0].id;
+
+    if ((categories as Category[] | []).length > 0) {
       return NextResponse.json(
-        { message: "Category name already exists" },
+        { message: "Category already exist" },
         { status: 409 }
       );
     }
-    const userId = (users as UserInterface[])[0].id;
-    const updated = await pool.query(
-      `UPDATE categories SET name =?, created_by=? WHERE id = ${categoryId}`,
+
+    await pool.query(
+      `UPDATE categories SET name=?, created_by=? WHERE id=${categoryId}`,
       [name, userId]
     );
-
-    console.log("updated", updated);
 
     return NextResponse.json({ message: "Category updated" }, { status: 200 });
   } catch (er) {

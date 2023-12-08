@@ -19,6 +19,20 @@ type QueryResultType = [
   FieldPacket[]
 ];
 
+export const GET = async (req: NextRequest) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM users");
+    const rowData: RowDataPacket[] = rows as RowDataPacket[];
+    const emptyPassword = rowData.map((user) => ({ ...user, password: "" }));
+    return NextResponse.json(
+      { ok: true, data: emptyPassword },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 });
+  }
+};
+
 export const POST = async (req: NextRequest) => {
   try {
     const { email, password, name, role } = await req.json();

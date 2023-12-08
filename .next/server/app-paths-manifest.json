@@ -1,8 +1,4 @@
 {
-  "/categories/update/[id]/page": "app/categories/update/[id]/page.js",
   "/auth/page": "app/auth/page.js",
-  "/page": "app/page.js",
-  "/categories/page": "app/categories/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/category/[categoryId]/route": "app/api/category/[categoryId]/route.js"
+  "/products/create/page": "app/products/create/page.js"
 }

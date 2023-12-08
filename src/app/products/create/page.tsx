@@ -1,62 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormCard from "@/app/components/FormCard";
 import Button from "@/app/components/Button";
 import FileCard from "../FileCard";
-import { ProductValues, File } from "@/app/redux/productsSlice";
+import {
+  ProductValues,
+  File,
+  allCategory,
+  ProductFormCategories,
+  addProduct,
+} from "@/app/redux/productSlice";
 import { validateProduct } from "@/app/common-utils/validations";
 import FormError from "@/app/components/FormError";
-
-const categoreis = [
-  {
-    _id: 1,
-    name: "Electronics",
-    createdBy: { name: "ADMIN", id: "123123" },
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    status: false,
-  },
-  {
-    _id: 1,
-    name: "Mobiles",
-    createdBy: { name: "ADMIN", id: "123123" },
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    status: true,
-  },
-  {
-    _id: 1,
-    name: "Shirts",
-    createdBy: { name: "ADMIN", id: "123123" },
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    status: true,
-  },
-  {
-    _id: 1,
-    name: "Jeans",
-    createdBy: { name: "ADMIN", id: "123123" },
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    status: true,
-  },
-  {
-    _id: 1,
-    name: "Watches",
-    createdBy: { name: "ADMIN", id: "123123" },
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    status: false,
-  },
-  {
-    _id: 1,
-    name: "Shoes",
-    createdBy: { name: "ADMIN", id: "123123" },
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    status: false,
-  },
-];
+import { useAppSelector } from "@/app/redux/hooks";
+import useFetch from "@/app/custom-hooks/useFetch";
+import { removeFile } from "@/app/common-utils/common-fns";
+import usePost from "@/app/custom-hooks/usePost";
 
 const values = {
   name: "",
@@ -67,12 +26,31 @@ const values = {
   images: [],
 };
 
+type key = string | number | boolean;
+
 const AddProduct = () => {
   const [files, setFiles] = useState<File[] | []>([]);
   const [formValues, setFormValues] = useState<ProductValues>(values);
   const [errors, setErrors] = useState<Partial<ProductValues>>(values);
 
+  const { handleFetch } = useFetch();
+  const { create } = usePost();
+
+  const categories = useAppSelector((state) => state.product.categories) as
+    | ProductFormCategories[]
+    | [];
+
+  const fileRemoveHandler = (id: number) => {
+    const filtered = removeFile(id, files);
+    setFiles(filtered);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
@@ -97,8 +75,29 @@ const AddProduct = () => {
       return;
     }
 
-    console.log("Create-Product-no-er");
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append("files", file as any);
+    }
+    // files.forEach((file) => {
+    //   formData.append("files", file as any);
+    // });
+
+    console.log("formData", formData);
+
+    formData.append("name", formValues.name);
+    formData.append("price", formValues.price);
+    formData.append("quantity", formValues.quantity);
+    formData.append("category", formValues.category);
+    formData.append("description", formValues.description);
+
+    create(addProduct, formData, "/products", "Product");
   };
+
+  useEffect(() => {
+    handleFetch(allCategory);
+  }, []);
+
   return (
     <FormCard title="Add Product" navigate="/products">
       <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -147,8 +146,8 @@ const AddProduct = () => {
             onChange={handleSelectChange}
           >
             <option value="">None</option>
-            {categoreis.map((c, index) => (
-              <option key={index} value={c._id}>
+            {categories.map((c, index) => (
+              <option key={index} value={c.name}>
                 {c.name}
               </option>
             ))}
@@ -159,10 +158,10 @@ const AddProduct = () => {
           <label className="ml-1 text-gray-500">Description</label>
           <textarea
             name="description"
-            id=""
             cols={30}
             rows={3}
             value={formValues.description}
+            onChange={handleTextareaChange}
             placeholder="Please enter product description...."
             className="border-2 py-1 px-2 outline-primary text-black rounded-lg"
           ></textarea>
@@ -172,7 +171,7 @@ const AddProduct = () => {
         <div className="flex flex-col  w-full">
           <label
             htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+            className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600 mb-2"
           >
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <svg
@@ -184,9 +183,9 @@ const AddProduct = () => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                 />
               </svg>
@@ -203,7 +202,7 @@ const AddProduct = () => {
               className="hidden"
               name="images"
               accept="image/*"
-              multiple
+              multiple={true}
               onChange={handleFileChange}
             />
           </label>
@@ -213,7 +212,13 @@ const AddProduct = () => {
         {files.length > 0 && (
           <div className="grid grid-rows-1 grid-cols-4 my-4 gap-4">
             {Object.values(files).map((file, index) => (
-              <FileCard name={file?.name as string} />
+              <FileCard
+                key={index}
+                index={index}
+                name={file?.name as string}
+                files={files}
+                fileRemoveHandler={fileRemoveHandler}
+              />
             ))}
           </div>
         )}
