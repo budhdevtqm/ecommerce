@@ -15,19 +15,18 @@ interface ImageGalleryProsp {
 }
 
 const ImageSlider: React.FC<ImageGalleryProsp> = ({ images }) => {
-  console.log("images", images);
   return (
-    <div className="w-[40%] bg-white p-8 rounded-lg shadow-lg">
+    <div className="w-[40%] bg-white p-8 rounded-lg shadow-lg ">
       <CarouselProvider
-        naturalSlideWidth={50}
-        naturalSlideHeight={30}
-        totalSlides={images.length}
+        naturalSlideWidth={100}
+        naturalSlideHeight={125}
+        totalSlides={images?.length ?? 0}
       >
         <Slider>
-          {images.map((i, index) => (
-            <Slide index={0}>
-              <div className="flex items-center justify-center mx-auto my-auto w-[150px] border  rounded-lg  p-4">
-                <img src={i} className="my-8" />
+          {images?.map((i, index) => (
+            <Slide index={0} key={index}>
+              <div className="flex items-center justify-center mx-auto my-auto w-[150px] border shadow-lg  rounded-lg  p-4">
+                <img src={`/upload/products/${i}`} className="my-8" />
               </div>
             </Slide>
           ))}

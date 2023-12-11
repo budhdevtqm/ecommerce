@@ -79,18 +79,11 @@ const AddProduct = () => {
     for (const file of files) {
       formData.append("files", file as any);
     }
-    // files.forEach((file) => {
-    //   formData.append("files", file as any);
-    // });
-
-    console.log("formData", formData);
-
     formData.append("name", formValues.name);
     formData.append("price", formValues.price);
     formData.append("quantity", formValues.quantity);
     formData.append("category", formValues.category);
     formData.append("description", formValues.description);
-
     create(addProduct, formData, "/products", "Product");
   };
 

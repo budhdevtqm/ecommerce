@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Wrapper from "../components/Wrapper";
 import PageHeader from "../components/PageHeader";
 import { MdInfo, MdEdit, MdDelete } from "react-icons/md";
@@ -9,35 +9,26 @@ import Image from "next/image";
 import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import IamgeGallery from "../components/ImageSlider";
-
-const products = [
-  {
-    _id: 1,
-    name: "Watch",
-    price: "999",
-    images: ["/images/watch.jpeg", "/images/watch.jpeg", "/images/watch.jpeg"],
-    quantity: 100,
-    createdAt: new Date().getTime(),
-    updatedAt: new Date().getTime(),
-    category: "Watches",
-    storeId: { name: "DM Store", id: "123498203840923840" },
-  },
-];
+import useFetch from "../custom-hooks/useFetch";
+import { FetchedProduct, getAllProducts } from "../redux/productSlice";
+import { useAppSelector } from "../redux/hooks";
 
 const Products: React.FC = () => {
+  const { handleFetch } = useFetch();
+  const products = useAppSelector((state) => state.product.products) as
+    | FetchedProduct[]
+    | [];
+
+  useEffect(() => {
+    handleFetch(getAllProducts);
+  }, []);
+
+  const deleteHandler = async (id: number) => {
+    console.log("delete this ", id);
+  };
   return (
     <Wrapper>
       <PageHeader title="All Products" navigate="/products/create" />
-
-      {/* <Modal open={true} center onClose={() => false}>
-        <div className="min-w-[500px] p-8">
-          <div>
-        
-          </div>
-          <div></div>
-        </div>
-      </Modal> */}
-
       <div className="my-8 p-2 border-t-2 border-primary">
         <table className="min-w-full leading-normal">
           <thead>
@@ -59,29 +50,29 @@ const Products: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((user: any, index) => (
-              <tr key={index}>
+            {products.map((product: FetchedProduct) => (
+              <tr key={product.id}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">
+                  <p className="text-gray-900 whitespace-no-wrap text-center">
                     <Image
-                      src={user.images[0]}
-                      alt={user.name + "image"}
+                      src={`/upload/products/${product.images[0]}`}
+                      alt={product.name + "image"}
                       width={50}
                       height={50}
                     />
                   </p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {user.name}
+                  {product.name}
                 </td>
 
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
-                    {user.price}
+                    {product.price}
                   </p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {user.status ? (
+                  {product.status ? (
                     <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                       <span
                         aria-hidden
@@ -102,19 +93,16 @@ const Products: React.FC = () => {
 
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                   <span className="flex text-[20px] gap-3 cursor-pointer items-center justify-center">
-                    <Link href={`/products/${user._id}`}>
-                      <MdInfo
-                        title="Info"
-                      
-                      />
+                    <Link href={`/products/${product.id}`}>
+                      <MdInfo title="Info" />
                     </Link>
 
-                    <Link href={`/products/update/${user._id}`}>
+                    <Link href={`/products/update/${product.id}`}>
                       <MdEdit title="Edit" />
                     </Link>
                     <MdDelete
                       title="Delete"
-                      // onClick={() => deleteHandler(user._id as String)}
+                      onClick={() => deleteHandler(product.id as number)}
                     />
                   </span>
                 </td>

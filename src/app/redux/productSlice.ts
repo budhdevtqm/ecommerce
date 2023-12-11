@@ -20,6 +20,21 @@ export interface ProductValues {
   images: Array<File> | [] | string;
 }
 
+export interface FetchedProduct {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  description: string;
+  created_by: number;
+  created_at: string;
+  updated_at: string;
+  status: number;
+  images: string[] | [];
+  total?: number;
+  rest?: number;
+}
+
 export interface ProductFormCategories {
   id: number;
   name: string;
@@ -27,15 +42,33 @@ export interface ProductFormCategories {
 
 interface InitialTypes {
   loading: boolean;
-  products: any[] | [];
+  products: FetchedProduct[] | [];
   categories: ProductFormCategories[] | [];
+  product: FetchedProduct | null;
 }
 
 const initialState: InitialTypes = {
   loading: false,
   products: [],
   categories: [],
+  product: null,
 };
+
+export const getAllProducts = createAsyncThunk(
+  "/get-all-products",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/product");
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
 
 export const allCategory = createAsyncThunk(
   "/all-category",
@@ -72,6 +105,22 @@ export const addProduct = createAsyncThunk(
   }
 );
 
+export const getProduct = createAsyncThunk(
+  "/get-product",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/api/product/${id}`);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -83,7 +132,6 @@ const productSlice = createSlice({
       })
       .addCase(addProduct.fulfilled, (state, { payload }) => {
         state.loading = false;
-        console.log("----all products", payload);
       });
 
     builder
@@ -93,6 +141,23 @@ const productSlice = createSlice({
       .addCase(allCategory.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.categories = payload.data.data;
+      });
+    builder
+      .addCase(getAllProducts.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllProducts.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.products = payload.data.data;
+      });
+
+    builder
+      .addCase(getProduct.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getProduct.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.product = payload.data.data;
       });
   },
 });
