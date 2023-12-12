@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { fetchCategory } from "./categorySlice";
+import { create } from "domain";
 
 export interface File {
   lastModified: number;
@@ -13,11 +14,16 @@ export interface File {
 
 export interface ProductValues {
   name: string;
-  price: string;
-  quantity: string;
+  price: string | number;
+  quantity: string | number;
   category: string;
   description: string;
-  images: Array<File> | [] | string;
+  images: Array<File> | string[] | [] | string;
+  id?: number;
+  created_by?: number;
+  created_at?: string;
+  updated_at?: string;
+  status?: number;
 }
 
 export interface FetchedProduct {
@@ -31,8 +37,12 @@ export interface FetchedProduct {
   updated_at: string;
   status: number;
   images: string[] | [];
-  total?: number;
-  rest?: number;
+  quantity: string | number;
+}
+
+interface DeleteImagePayload {
+  id: string;
+  images: string[] | [];
 }
 
 export interface ProductFormCategories {
@@ -110,6 +120,57 @@ export const getProduct = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/product/${id}`);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
+export const deleteImage = createAsyncThunk(
+  "/delete-image",
+  async (values: DeleteImagePayload, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(`/api/product/remove/${values.id}`, {
+        images: values.images,
+      });
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "/update-product",
+  async (values: any, { rejectWithValue }) => {
+    try {
+      const { productId, formData } = values;
+      const response = await axios.patch(`/api/product/${productId}`, formData);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
+export const deleteProduct = createAsyncThunk(
+  "/delete-product",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`/api/product/${id}`);
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

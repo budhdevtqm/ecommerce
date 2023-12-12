@@ -99,13 +99,13 @@ export const validateProduct = (values: ProductValues, mode = "create") => {
     errors.name = "Name must be of 3 chars!";
   }
 
-  if (!price || price.trim() === "") {
+  if (!(price as string)) {
     errors.price = "Please enter price!";
   } else if (Number(price) < 1) {
     errors.price = "Please enter valid price!";
   }
 
-  if (!quantity || quantity.trim() === "") {
+  if (!(quantity as string) || (quantity as string).trim() === "") {
     errors.quantity = "Please enter quantity!";
   } else if (Number(quantity) < 1) {
     errors.quantity = "Please enter valid quantity!";

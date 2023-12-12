@@ -41,15 +41,19 @@ export const POST = async (req: NextRequest) => {
     const files = formData.getAll("files") as File[] | [];
     const fileNames = await fileUploder(files, "products");
 
-    const [product] = (await pool.query(
-      `INSERT INTO products (name, category, price, description, status, created_by, images) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [name, category, price, description, 1, 2, JSON.stringify(fileNames)]
+    (await pool.query(
+      `INSERT INTO products (name, category, price, description, status, created_by, quantity, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        name,
+        category,
+        price,
+        description,
+        1,
+        2,
+        Number(quantity),
+        JSON.stringify(fileNames),
+      ]
     )) as any;
-
-    await pool.query(
-      "INSERT INTO inventory (product_id, added, rest) VALUES (?, ?, ?)",
-      [product.insertId, quantity, quantity]
-    );
 
     return NextResponse.json(
       {

@@ -6,15 +6,20 @@ import { MdInfo, MdEdit, MdDelete } from "react-icons/md";
 import { getDate, getTime } from "../common-utils/common-fns";
 import Link from "next/link";
 import Image from "next/image";
-import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
-import IamgeGallery from "../components/ImageSlider";
 import useFetch from "../custom-hooks/useFetch";
-import { FetchedProduct, getAllProducts } from "../redux/productSlice";
+import {
+  FetchedProduct,
+  deleteProduct,
+  getAllProducts,
+} from "../redux/productSlice";
 import { useAppSelector } from "../redux/hooks";
+import useDelete from "../custom-hooks/useDelete";
 
 const Products: React.FC = () => {
   const { handleFetch } = useFetch();
+  const handleDelete = useDelete();
+
   const products = useAppSelector((state) => state.product.products) as
     | FetchedProduct[]
     | [];
@@ -24,7 +29,8 @@ const Products: React.FC = () => {
   }, []);
 
   const deleteHandler = async (id: number) => {
-    console.log("delete this ", id);
+    await handleDelete(deleteProduct, id);
+    await handleFetch(getAllProducts);
   };
   return (
     <Wrapper>

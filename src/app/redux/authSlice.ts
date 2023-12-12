@@ -50,7 +50,6 @@ export const handleLogout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/api/auth/logout");
-      console.log("handleLogout  response", response);
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

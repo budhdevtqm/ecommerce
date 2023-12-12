@@ -1,3 +1,5 @@
+"use client";
+
 interface Header {
   headers: { authorization: string };
 }

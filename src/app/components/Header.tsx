@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { FaUserLarge } from "react-icons/fa6";
 import Navbar from "./Navbar";
@@ -25,7 +26,7 @@ const Header: React.FC = () => {
         <span className="font-semibold text-textPrimary text-[14px] ">TQM</span>
         <span className="font-bold text-primary ">Mart</span>
       </Link>
-      <div className="">
+      <div>
         <Navbar />
       </div>
       <div className="flex items-center justify-center gap-8">

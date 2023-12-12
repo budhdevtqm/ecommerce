@@ -80,8 +80,8 @@ const AddProduct = () => {
       formData.append("files", file as any);
     }
     formData.append("name", formValues.name);
-    formData.append("price", formValues.price);
-    formData.append("quantity", formValues.quantity);
+    formData.append("price", formValues.price as string);
+    formData.append("quantity", formValues.quantity as string);
     formData.append("category", formValues.category);
     formData.append("description", formValues.description);
     create(addProduct, formData, "/products", "Product");
@@ -116,7 +116,7 @@ const AddProduct = () => {
             onChange={handleChange}
             value={formValues.price}
           />
-          <FormError message={errors.price || ""} />
+          <FormError message={(errors.price as string) || ""} />
         </div>
         <div className="flex flex-col gap-1 my-3">
           <label className="ml-1 text-gray-500 ">Quantity</label>
@@ -128,7 +128,7 @@ const AddProduct = () => {
             onChange={handleChange}
             value={formValues.quantity}
           />
-          <FormError message={errors.quantity || ""} />
+          <FormError message={(errors.quantity as string) || ""} />
         </div>
         <div className="flex flex-col gap-1 my-3">
           <label className="ml-1 text-gray-500">Category</label>

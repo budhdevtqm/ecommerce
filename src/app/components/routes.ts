@@ -1,10 +1,19 @@
-const allRoutes = [
+export const userRoutes = [
   { label: "Home", path: "/" },
-  { label: "Categories", path: "/categories" },
-  { label: "Products", path: "/products" },
-  // { label: "Store", path: "/store" },
-  { label: "Users", path: "/users" },
   { label: "Orders", path: "/orders" },
 ];
 
-export default allRoutes;
+export const sellerRoutes = [
+  { label: "Home", path: "/" },
+  { label: "Categories", path: "/categories" },
+  { label: "Products", path: "/products" },
+  { label: "Orders", path: "/orders" },
+];
+
+export const adminRoute = [
+  { label: "Home", path: "/" },
+  { label: "Categories", path: "/categories" },
+  { label: "Products", path: "/products" },
+  { label: "Orders", path: "/orders" },
+  { label: "Users", path: "/users" },
+];

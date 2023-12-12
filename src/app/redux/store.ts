@@ -3,6 +3,7 @@ import authReducer from "./authSlice";
 import userReducer from "./userSlice";
 import categoryReducer from "./categorySlice";
 import productReducer from "./productSlice";
+import homeReducer from "./homeSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     users: userReducer,
     category: categoryReducer,
     product: productReducer,
+    home: homeReducer,
   },
 });
 

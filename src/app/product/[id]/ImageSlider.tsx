@@ -13,7 +13,7 @@ const ImageSlider: React.FC<SliderProps> = ({ images, setImg }) => {
       {images.map((url, index) => (
         <Image
           key={index}
-          src={url}
+          src={`/upload/products/${url}`}
           width={40}
           height={40}
           alt="product-img"

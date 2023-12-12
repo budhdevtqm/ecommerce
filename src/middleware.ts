@@ -38,6 +38,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    if (pathname.includes("/products") && userRole !== "user") {
+      return NextResponse.next();
+    }
+
     return NextResponse.redirect(new URL("/", url));
   } catch (error) {
     return NextResponse.redirect(new URL("/auth", url));
@@ -45,5 +49,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/users/:path*", "/categories/:path*"],
+  matcher: ["/users/:path*", "/categories/:path*", "/products/:path*"],
 };
