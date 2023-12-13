@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { userRoutes, sellerRoutes, adminRoute } from "./routes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,7 +12,8 @@ interface Route {
 const Navbar: React.FC = () => {
   const pathName = usePathname();
   const router = useRouter();
-  const userRole = localStorage.getItem("role");
+  const userRole =
+    typeof window !== "undefined" ? window.localStorage.getItem("role") : false;
 
   const filterLinks = () => {
     if (!userRole) {
@@ -26,21 +27,24 @@ const Navbar: React.FC = () => {
     return [];
   };
 
+  const routes = filterLinks() as Route[] | [];
+
   return (
     <nav className="flex gap-4 text-[14px] px-4">
-      {(filterLinks() as Route[] | []).map((link, index) => (
-        <Link
-          key={index}
-          className={
-            pathName === link.path
-              ? "font-medium text-primary p-2"
-              : "font-medium hover:text-primary p-2"
-          }
-          href={link.path}
-        >
-          {link.label}
-        </Link>
-      ))}
+      {routes.length > 0 &&
+        routes.map((link, index) => (
+          <Link
+            key={index}
+            className={
+              pathName === link.path
+                ? "font-medium text-primary p-2"
+                : "font-medium hover:text-primary p-2"
+            }
+            href={link.path}
+          >
+            {link.label}
+          </Link>
+        ))}
     </nav>
   );
 };

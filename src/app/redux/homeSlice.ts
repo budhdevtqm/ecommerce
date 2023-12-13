@@ -18,6 +18,15 @@ export interface Product {
   quantity: string | number;
 }
 
+export interface AddCartProduct {
+  id?: number;
+  user_id: number;
+  product_id: number;
+  product_name: string;
+  product_image: string;
+  price: string;
+}
+
 interface Initials {
   loading: boolean;
   products: Product[] | [];
@@ -51,6 +60,22 @@ export const getSingleProduct = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/home/${id}`);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
+export const addToCart = createAsyncThunk(
+  "/add-to-cart",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/home", { id, user_id: 2 });
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

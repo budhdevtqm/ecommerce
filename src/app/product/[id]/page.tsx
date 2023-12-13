@@ -34,13 +34,14 @@ const images = [
 ];
 
 const ViewProduct = () => {
-  const product = useAppSelector(
-    (state) => state.home.product
-  ) as Product | null;
-  const [img, setImg] = useState(product?.images[0]);
+  const [img, setImg] = useState("");
   const { fetchById } = useFetch();
   const router = useRouter();
   const id = useParams().id as string;
+
+  const product = useAppSelector(
+    (state) => state.home.product
+  ) as Product | null;
 
   const addToCartHandler = (id: number) => {
     console.log("add-to-cart-id", id);
@@ -49,6 +50,12 @@ const ViewProduct = () => {
   useEffect(() => {
     fetchById(getSingleProduct, id);
   }, []);
+
+  useEffect(() => {
+    if (product !== null) {
+      setImg(`/upload/products/${product?.images[0]}`);
+    }
+  }, [product]);
 
   return (
     <Wrapper>

@@ -42,6 +42,14 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
+    if (pathname === "/") {
+      return NextResponse.next();
+    }
+
+    if (pathname === "/cart") {
+      return NextResponse.next();
+    }
+
     return NextResponse.redirect(new URL("/", url));
   } catch (error) {
     return NextResponse.redirect(new URL("/auth", url));
@@ -49,5 +57,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/users/:path*", "/categories/:path*", "/products/:path*"],
+  matcher: [
+    "/users/:path*",
+    "/categories/:path*",
+    "/products/:path*",
+    "/",
+    "/cart",
+  ],
 };

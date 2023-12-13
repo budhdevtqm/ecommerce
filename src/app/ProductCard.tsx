@@ -5,16 +5,23 @@ import { adjustProductName } from "./common-utils/common-fns";
 import { FaCartPlus } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
 import Link from "next/link";
-import { Product } from "./redux/homeSlice";
+import { Product, addToCart } from "./redux/homeSlice";
+import usePost from "./custom-hooks/usePost";
 
 interface ProductCartProps {
   product: Product;
 }
 
 const ProductCard: React.FC<ProductCartProps> = ({ product }) => {
+  const { create } = usePost();
+
+  const addToCartHandler = async (product: Product) => {
+    await create(addToCart, product.id, "/", "Added to Cart");
+  };
+
   return (
     <div className="bg-white rounded shadow w-[200px] flex items-center justify-center py-2">
-      <div className="">
+      <div>
         <div className="border border-gray-200 p-1 flex items-center justify-center">
           <Image
             src={`/upload/products/${product.images[0]}`}
@@ -37,7 +44,10 @@ const ProductCard: React.FC<ProductCartProps> = ({ product }) => {
         </div>
         <div className="flex items-center justify-between my-1">
           <span className="bg-white text-gray-400 text-[20px] cursor-pointer hover:text-primary">
-            <FaCartPlus title="Add To Cart" />
+            <FaCartPlus
+              title="Add To Cart"
+              onClick={() => addToCartHandler(product)}
+            />
           </span>
           <Link
             href={`/product/${product.id}`}

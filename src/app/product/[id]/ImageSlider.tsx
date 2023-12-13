@@ -18,7 +18,7 @@ const ImageSlider: React.FC<SliderProps> = ({ images, setImg }) => {
           height={40}
           alt="product-img"
           className="border p-1 cursor-pointer"
-          onClick={() => setImg(url)}
+          onClick={() => setImg(`/upload/products/${url}`)}
         />
       ))}
     </div>
