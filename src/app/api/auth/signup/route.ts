@@ -43,7 +43,7 @@ export const POST = async (req: NextRequest) => {
     const hash = await bcrypt.hash(password, 10);
     await pool.query(
       "INSERT INTO  users (name, email, password, role, status) VALUES (?,?,?,?,?)",
-      [name, email, hash, "user", true]
+      [name, email, hash, "user", 1]
     );
 
     return NextResponse.json(

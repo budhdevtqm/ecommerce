@@ -1,3 +1,7 @@
+"use client";
+
+import { CartItem } from "../redux/cartSlice";
+
 export const getDate = (stamp: string) => new Date(stamp).toDateString();
 export const getTime = (stamp: string) => new Date(stamp).toLocaleTimeString();
 
@@ -58,4 +62,27 @@ export const successToast = (
 export const removeFile = (id: number, files: any) => {
   const filtered = files.filter((file: any, index: number) => index !== id);
   return filtered;
+};
+
+export const getUserRole = () => {
+  if (typeof window !== "undefined" && window.localStorage) {
+    return localStorage.getItem("role");
+  }
+};
+
+export const getUserEmail = () => {
+  if (typeof window !== "undefined" && window.localStorage) {
+    return localStorage.getItem("userEmail");
+  }
+};
+
+export const headers = {
+  headers: {
+    userEmail: getUserEmail(),
+  },
+};
+
+export const cartItemName = (name: string) => {
+  if (name.length < 20) return name;
+  return name.slice(0, 19);
 };

@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { userRoutes, sellerRoutes, adminRoute } from "./routes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { getUserRole, getUserEmail } from "../common-utils/common-fns";
 
 interface Route {
   label: string;
@@ -10,10 +11,11 @@ interface Route {
 }
 
 const Navbar: React.FC = () => {
+  const [routes, setRoutes] = useState<Route[] | []>([]);
   const pathName = usePathname();
   const router = useRouter();
-  const userRole =
-    typeof window !== "undefined" ? window.localStorage.getItem("role") : false;
+  const userRole = getUserRole();
+  const userEmail = getUserEmail();
 
   const filterLinks = () => {
     if (!userRole) {
@@ -27,7 +29,18 @@ const Navbar: React.FC = () => {
     return [];
   };
 
-  const routes = filterLinks() as Route[] | [];
+  useEffect(() => {
+    if (userRole && userEmail) {
+      if (userRole) {
+        const result = filterLinks();
+        setRoutes(result as Route[]);
+      }
+    } else {
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("role");
+      router.push("/auth");
+    }
+  }, [userRole]);
 
   return (
     <nav className="flex gap-4 text-[14px] px-4">

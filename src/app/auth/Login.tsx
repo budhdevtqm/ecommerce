@@ -38,11 +38,11 @@ const Login: React.FC = () => {
     const res: any = await dispatch(handleLogin(formValues));
 
     if (res.type.includes("fulfilled")) {
-      const { token, role, message } = res.payload.data.data;
-      localStorage.setItem("token", token);
+      const { role, userEmail, message } = res.payload.data.data;
       localStorage.setItem("role", role);
+      localStorage.setItem("userEmail", userEmail);
       toast.success(message, { position: "top-right" });
-      setTimeout(() => router.push("/"), 1000);
+      router.push("/");
       return;
     }
     if (res.type.includes("rejected")) {

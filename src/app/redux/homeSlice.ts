@@ -1,8 +1,7 @@
 "use client";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-/* Interface's */
+import { headers } from "../common-utils/common-fns";
 
 export interface Product {
   id: number;
@@ -37,6 +36,14 @@ const initialState: Initials = {
   loading: false,
   products: [],
   product: null,
+};
+
+const getUserInfo = () => {
+  const isClient = typeof window;
+  if (isClient !== undefined) {
+    return localStorage.getItem("userEmail");
+  }
+  return "";
 };
 
 export const getAllProducts = createAsyncThunk(
@@ -75,7 +82,11 @@ export const addToCart = createAsyncThunk(
   "/add-to-cart",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/home", { id, user_id: 2 });
+      const response = await axios.post(
+        "/api/home",
+        { id, user_id: 2 },
+        headers
+      );
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

@@ -6,74 +6,46 @@ import Link from "next/link";
 import { MdDelete, MdEdit } from "react-icons/md";
 import Image from "next/image";
 import useFetch from "../custom-hooks/useFetch";
-import { getAllCartItems } from "../redux/cartSlice";
-
-const cartItmes = [
-  {
-    id: 1,
-    user_id: 2,
-    user_name: "developer",
-    product_id: 2,
-    product_name: "Nokia 1100",
-    product_image: "/upload/products/1702381956649-1100-4.jpeg",
-    price: 1299,
-    quantity: 1,
-    created_at: new Date().getTime(),
-    updated_at: new Date().getTime(),
-    status: true,
-  },
-  {
-    id: 1,
-    user_id: 2,
-    user_name: "developer",
-    product_id: 2,
-    product_name: "Nokia 1100",
-    product_image: "/upload/products/1702381956649-1100-4.jpeg",
-    price: 1299,
-    quantity: 1,
-    created_at: new Date().getTime(),
-    updated_at: new Date().getTime(),
-    status: true,
-  },
-  {
-    id: 1,
-    user_id: 2,
-    user_name: "developer",
-    product_id: 2,
-    product_name: "Nokia 1100",
-    product_image: "/upload/products/1702381956649-1100-4.jpeg",
-    price: 1299,
-    quantity: 1,
-    created_at: new Date().getTime(),
-    updated_at: new Date().getTime(),
-    status: true,
-  },
-  {
-    id: 1,
-    user_id: 2,
-    user_name: "developer",
-    product_id: 2,
-    product_name: "Nokia 1100",
-    product_image: "/upload/products/1702381956649-1100-4.jpeg",
-    price: 1299,
-    quantity: 1,
-    created_at: new Date().getTime(),
-    updated_at: new Date().getTime(),
-    status: true,
-  },
-];
+import { CartItem, deleteCartItem, getAllCartItems } from "../redux/cartSlice";
+import { useAppSelector } from "../redux/hooks";
+import CartCard from "./CartCard";
+import useDelete from "../custom-hooks/useDelete";
 
 const CartPage: React.FC = () => {
   const { handleFetch } = useFetch();
+  const handleDelete = useDelete();
 
+  const cartItems = useAppSelector((state) => state.cart.cartItems) as
+    | CartItem[]
+    | [];
 
   useEffect(() => {
-    handleFetch(getAllCartItems)
+    handleFetch(getAllCartItems);
   }, []);
+
+  const deleteHandler = async (id: number) => {
+    await handleDelete(deleteCartItem, id);
+    await handleFetch(getAllCartItems);
+  };
+
   return (
     <Wrapper>
       <PageHeader title="My Cart" />
-      <div className="my-8 p-2 border-t-2 border-primary">
+      <div>
+        {cartItems &&
+          cartItems.map((i: CartItem) => (
+            <CartCard key={i.id} item={i} remover={deleteHandler} />
+          ))}
+      </div>
+    </Wrapper>
+  );
+};
+
+export default CartPage;
+
+/*
+
+ <div className="my-8 p-2 border-t-2 border-primary">
         <table className="min-w-full leading-normal">
           <thead>
             <tr>
@@ -133,7 +105,7 @@ const CartPage: React.FC = () => {
 
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                   <span className="flex text-[20px] gap-3 cursor-pointer items-center justify-center">
-                    {/* <Link href={`/products/${product.id}`}>
+                  <Link href={`/products/${product.id}`}>
                       <MdInfo title="Info" />
                     </Link>
 
@@ -143,16 +115,13 @@ const CartPage: React.FC = () => {
                     <MdDelete
                       title="Delete"
                       onClick={() => deleteHandler(product.id as number)}
-                    /> */}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Wrapper>
-  );
-};
+                    /> 
+                    </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-export default CartPage;
+*/

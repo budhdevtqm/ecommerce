@@ -15,6 +15,17 @@ interface Product {
   quantity: number;
 }
 
+interface User {
+  id: number;
+  password: string;
+  name: string;
+  email: string;
+  createAt: string;
+  updatedAt: string;
+  status: number;
+  role: string;
+}
+
 export const GET = async () => {
   try {
     const [products] = await pool.query("SELECT * FROM products");
@@ -29,19 +40,37 @@ export const GET = async () => {
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { id, user_id } = await req.json();
+    const { id } = await req.json();
+    const userEmail = req.headers.get("userEmail");
 
     const [products] = await pool.query(
       "SELECT * FROM products WHERE id=? LIMIT 1",
       [id]
     );
 
+    const [users] = await pool.query("SELECT * FROM users WHERE email=?", [
+      userEmail,
+    ]);
+
+    const userId = (users as User[])[0].id;
     const { name, images, price } = (products as Product[])[0];
 
-    await pool.query(
-      "INSERT INTO cart (user_id, product_id, name, image, price,status) VALUES (?, ?, ?, ?, ?, ?)",
-      [user_id, id, name, images[0], price, 1]
+    const [isAlreadyCartItem] = await pool.query(
+      "SELECT * FROM cart WHERE product_id =? AND user_id=?",
+      [id, userId]
     );
+
+    if ((isAlreadyCartItem as any).length === 0) {
+      await pool.query(
+        "INSERT INTO cart (user_id, product_id, name, image, price, status, qty) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [userId, id, name, images[0], price, 1, 1]
+      );
+    }
+
+    if ((isAlreadyCartItem as any).length > 0) {
+      const { id: cartId, qty } = (isAlreadyCartItem as any)[0];
+      await pool.query(`UPDATE cart SET qty=${qty + 1} WHERE id=${cartId}`);
+    }
 
     return NextResponse.json({ message: "Added to cart" }, { status: 201 });
   } catch (er) {

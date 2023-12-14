@@ -1,10 +1,29 @@
 "use client";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { headers } from "../common-utils/common-fns";
+
+export interface CartItem {
+  created_at: string;
+  id: number;
+  image: string;
+  name: string;
+  price: number;
+  product_id: number;
+  status: number;
+  updated_at: string;
+  user_id: number;
+  qty?: number;
+}
+
+interface updateQuantity {
+  id: number;
+  operationType: string;
+}
 
 interface Initials {
   loading: boolean;
-  cartItems: any[];
+  cartItems: CartItem[] | [];
 }
 
 const initialState: Initials = {
@@ -16,12 +35,45 @@ export const getAllCartItems = createAsyncThunk(
   "/get-cart-items",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/cart", {
-        headers: {
-          authorization:
-            "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyRW1haWwiOiJidWRoZGV2dHFtQGdtYWlsLmNvbSIsInVzZXJSb2xlIjoiYWRtaW4iLCJleHAiOjE3MDI0NjAzODF9.wYzZUveEtnjaHD1LTcPjN4S_O19iqmLftLBPvkkeNE0",
-        },
-      });
+      const response = await axios.get("/api/cart", headers);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
+export const deleteCartItem = createAsyncThunk(
+  "/delete-cart-item",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`/api/cart/${id}`, headers);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
+export const updateQuantity = createAsyncThunk(
+  "/update-quantity",
+  async (values: updateQuantity, { rejectWithValue }) => {
+    try {
+      const { operationType, id } = values;
+      const response = await axios.patch(
+        `/api/cart/${id}`,
+        { operationType },
+        headers
+      );
+
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {
@@ -44,7 +96,7 @@ const cartSlice = createSlice({
       })
       .addCase(getAllCartItems.fulfilled, (state, { payload }) => {
         state.loading = false;
-        console.log("get-cart-items-payload", payload);
+        state.cartItems = payload.data.data;
       });
   },
 });

@@ -1,16 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/dbConfig/db";
 
+interface User {
+  id: number;
+  password: string;
+  name: string;
+  email: string;
+  createAt: string;
+  updatedAt: string;
+  status: number;
+  role: string;
+}
+
 // export const POST =
 
 export const GET = async (req: NextRequest) => {
   try {
-    console.log("headers", req.headers);
     const userEmail = req.headers.get("userEmail");
-    // console.log("userEmail", userEmail);
-    return NextResponse.json({ data: [] }, { status: 200 });
+    const [users] = await pool.query("SELECT * FROM users WHERE email=?", [
+      userEmail,
+    ]);
+
+    const userId = (users as User[])[0].id;
+
+    const [myCartItmes] = await pool.query(
+      "SELECT * FROM cart WHERE user_id=?",
+      [userId]
+    );
+
+    return NextResponse.json({ data: myCartItmes }, { status: 200 });
   } catch (er) {
-    console.log("GET-CART-ITEMS---er", er);
     return NextResponse.json({ data: [] }, { status: 200 });
   }
 };

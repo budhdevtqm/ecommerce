@@ -70,9 +70,15 @@ export const POST = async (req: NextRequest) => {
     cookies().set("token", jwt, {
       httpOnly: true,
     });
-  
+
     return NextResponse.json(
-      { data: { message: "login successfully", role: userRole } },
+      {
+        data: {
+          message: "login successfully",
+          role: userRole,
+          userEmail,
+        },
+      },
       { status: 200 }
     );
   } catch (er) {

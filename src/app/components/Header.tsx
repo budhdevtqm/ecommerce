@@ -14,10 +14,15 @@ const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const handleClick = () => {
-    dispatch(handleLogout());
-    toast.success("logout successfuly", { position: "top-right" });
-    router.push("/auth");
+  const handleClick = async () => {
+    const response = await dispatch(handleLogout());
+    if (response.type.includes("fulfilled")) {
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("role");
+      toast.success("logout successfuly", { position: "top-right" });
+      router.push("/auth");
+      return;
+    }
   };
 
   return (
