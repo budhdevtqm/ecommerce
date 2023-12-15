@@ -12,8 +12,6 @@ interface User {
   role: string;
 }
 
-// export const POST =
-
 export const GET = async (req: NextRequest) => {
   try {
     const userEmail = req.headers.get("userEmail");
@@ -22,12 +20,10 @@ export const GET = async (req: NextRequest) => {
     ]);
 
     const userId = (users as User[])[0].id;
-
     const [myCartItmes] = await pool.query(
       "SELECT * FROM cart WHERE user_id=?",
       [userId]
     );
-
     return NextResponse.json({ data: myCartItmes }, { status: 200 });
   } catch (er) {
     return NextResponse.json({ data: [] }, { status: 200 });

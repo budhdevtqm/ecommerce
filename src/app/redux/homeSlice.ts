@@ -82,11 +82,7 @@ export const addToCart = createAsyncThunk(
   "/add-to-cart",
   async (id: string, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "/api/home",
-        { id, user_id: 2 },
-        headers
-      );
+      const response = await axios.post("/api/home", { id }, headers);
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

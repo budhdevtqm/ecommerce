@@ -1,22 +1,29 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { CartItem, deleteCartItem, updateQuantity } from "../redux/cartSlice";
+import React, { SetStateAction, useEffect, useState } from "react";
+import { CartItem, updateQuantity } from "../redux/cartSlice";
 import Image from "next/image";
-import Button from "../components/Button";
 import { ImCross } from "react-icons/im";
 import { cartItemName } from "../common-utils/common-fns";
 import usePatch from "../custom-hooks/usePatch";
 
 interface CardProps {
   item: CartItem;
+  myCart: CartItem[] | [];
+  setTotal: (toatl: number) => void;
   remover: (id: number) => void;
+  setMyCart: React.Dispatch<SetStateAction<CartItem[] | []>>;
 }
 
-const CartCard: React.FC<CardProps> = ({ item, remover }) => {
+const CartCard: React.FC<CardProps> = ({
+  item,
+  myCart,
+  remover,
+  setMyCart,
+  setTotal,
+}) => {
   const update = usePatch();
   const [qty, setQty] = useState(0);
-  const total = (a: number, b: number) => a * b;
-
+  const [myTotal, setMyTotal] = useState(0);
   const handleIncrement = () => setQty(qty + 1);
   const handleDecrement = () => qty > 1 && setQty(qty - 1);
 
@@ -40,10 +47,26 @@ const CartCard: React.FC<CardProps> = ({ item, remover }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const filtered = myCart.filter((i: CartItem) => item.id === i.id)[0];
+    const updatedItem = { ...filtered, qty };
+    const itemIndex = myCart.findIndex((i: CartItem) => i.id === item.id);
+    const allItems = [...myCart];
+    allItems.splice(itemIndex, 1, updatedItem);
+
+    const itemsTotal = allItems
+      .map((item: CartItem) => item.qty! * item.price)
+      .reduce((a, b) => a + b, 0);
+
+    setTotal(itemsTotal);
+    setMyCart(allItems);
+    setMyTotal(qty * item.price);
+  }, [qty]);
+
   return (
     <div className="flex items-center justify-center my-3">
       <div className="w-[90%] bg-white flex items-center justify-between p-2  rounded-md shadow-xl">
-        <div className="bg-white flex items-center justify-between gap-1 w-[70%]">
+        <div className="bg-white flex items-center justify-between gap-1 w-[90%]">
           <div>
             <Image
               src={`/upload/products/${item.image}`}
@@ -72,7 +95,7 @@ const CartCard: React.FC<CardProps> = ({ item, remover }) => {
             </span>
           </div>
 
-          <span>{`₹${total(item.qty as number, item.price)} (total)`}</span>
+          <span>{`₹${myTotal}`}</span>
         </div>
         <div className="flex items-center gap-4 mr-2">
           <span className="px-3 py-1">
