@@ -3,6 +3,7 @@ import { emailRegex, passwordRegex } from "./common-vars";
 import { UserValues, ProfileValidation } from "@/app/redux/userSlice";
 import { CategoryValues } from "@/app/redux/categorySlice";
 import { ProductValues } from "@/app/redux/productSlice";
+import { AddressErrors, AddressValues } from "../redux/homeSlice";
 
 export const validateSignup = (values: SignupValues) => {
   const { name, email, password } = values;
@@ -149,5 +150,50 @@ export const validateUserProfileForm = (values: ProfileValidation) => {
       "Please enter a password at least of 8, (lowercase, uppercase, number and special) chars!";
   }
 
+  return errors;
+};
+
+export const validateAddress = (values: AddressValues) => {
+  let errors: Partial<AddressErrors> = {};
+  const { country, name, mobile, apartment, pin, city, state } = values;
+  if (!country || name.trim() === "") {
+    errors.country = "Please select your country";
+  }
+
+  if (!name || name.trim() === "") {
+    errors.name = "Please enter name";
+  } else if (name.trim().length < 3) {
+    errors.name = "Name must be 3 chars";
+  }
+
+  if (!mobile || mobile.trim() === "") {
+    errors.mobile = "Please enter mobile number";
+  } else if (mobile.trim().length < 10) {
+    errors.mobile = "Please enter valid mobile number";
+  }
+
+  if (!apartment || apartment.trim() === "") {
+    errors.apartment = "Please enter apartment";
+  } else if (apartment.trim().length < 4) {
+    errors.apartment = "Please enter a descriptive apartment";
+  }
+
+  if (!pin || pin.trim() === "") {
+    errors.pin = "Please enter PIN";
+  } else if (pin.trim().length < 4) {
+    errors.pin = "Please enter a valid PIN";
+  }
+
+  if (!city || city.trim() === "") {
+    errors.city = "Please enter city";
+  } else if (city.trim().length < 3) {
+    errors.city = "City name must be of 3 chars";
+  }
+
+  if (!state || state.trim() === "") {
+    errors.state = "Please enter state name";
+  } else if (state.trim().length < 3) {
+    errors.state = "state name must be of 3 chars";
+  }
   return errors;
 };

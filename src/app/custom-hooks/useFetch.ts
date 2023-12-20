@@ -8,7 +8,7 @@ const useFetch = () => {
     await disptach(fn());
   };
 
-  const fetchById = async (fn: any, id: string) => {
+  const fetchById = async (fn: any, id: string | number) => {
     await disptach(fn(id));
   };
 

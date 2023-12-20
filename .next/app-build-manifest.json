@@ -9,22 +9,8 @@
     "/product/place-order/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
+      "static/css/app/product/place-order/[id]/page.css",
       "static/chunks/app/product/place-order/[id]/page.js"
-    ],
-    "/auth/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/auth/page.js"
-    ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
-    "/product/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/product/[id]/page.js"
     ]
   }
 }
