@@ -66,6 +66,12 @@ export interface AddressTypes {
   checked?: boolean;
 }
 
+interface PlaceOrderTypes {
+  productId: number;
+  amount: number;
+  quantity: number;
+}
+
 interface Initials {
   loading: boolean;
   products: Product[] | [];
@@ -205,6 +211,22 @@ export const addToCart = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await axios.post("/api/home", { id }, headers);
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
+export const placeOrder = createAsyncThunk(
+  "/place-order",
+  async (values: PlaceOrderTypes, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/home/payment", values, headers);
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

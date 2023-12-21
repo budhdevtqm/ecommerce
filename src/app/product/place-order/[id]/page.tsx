@@ -6,42 +6,49 @@ import Address from "@/app/components/Address";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import {
   AddressTypes,
+  Product,
   getMyAddresses,
-  setAddressId,
+  getSingleProduct,
 } from "@/app/redux/homeSlice";
 import useFetch from "@/app/custom-hooks/useFetch";
 import Payment from "@/app/components/payment";
 
 const OrderForm: React.FC = () => {
   const { id } = useParams();
-
-  const dispatch = useAppDispatch();
-  const { handleFetch } = useFetch();
+  const [amount, setAmount] = useState<number>(0);
+  const product = useAppSelector((state) => state.home.product) as Product;
+  const { handleFetch, fetchById } = useFetch();
 
   let { addresses, addressId } = useAppSelector((state) => state.home) as {
     addresses: AddressTypes[];
     addressId: number;
   };
 
-  useEffect(() => {}, [addressId as number]);
 
   useEffect(() => {
-    handleFetch(getMyAddresses);
-    dispatch(setAddressId(null));
+    if (id) {
+      handleFetch(getMyAddresses);
+      fetchById(getSingleProduct, id as string);
+    }
   }, []);
 
-  // useEffect(()=> {})
+  useEffect(() => {
+    if (product && Object.keys(product).length > 0) {
+      setAmount(product.price);
+    }
+  }, [product]);
 
   return (
     <Wrapper>
       <div className="flex gap-4 flex-col">
         <div className="rounded  w-full flex flex-col gap-4">
           <Address addresses={addresses} />
-          <span className="font-bold">2. Confirm Payment</span>
         </div>
-        <div>
-          <Payment />
-        </div>
+        {addressId && amount && (
+          <div>
+            <Payment amount={amount} />
+          </div>
+        )}
       </div>
     </Wrapper>
   );

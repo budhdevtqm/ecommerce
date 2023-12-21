@@ -660,6 +660,10 @@ video {
 .h-\[150px\] {
   height: 150px;
 }
+.h-fit {
+  height: -moz-fit-content;
+  height: fit-content;
+}
 .h-full {
   height: 100%;
 }
@@ -719,6 +723,10 @@ video {
 }
 .w-\[90\%\] {
   width: 90%;
+}
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .w-full {
   width: 100%;
@@ -788,6 +796,12 @@ video {
 }
 .gap-8 {
   gap: 2rem;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+.overflow-y-hidden {
+  overflow-y: hidden;
 }
 .rounded {
   border-radius: 0.25rem;

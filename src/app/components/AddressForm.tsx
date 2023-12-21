@@ -10,12 +10,13 @@ import {
   AddressValues,
   addAddress,
   getAddress,
+  setAddressId,
   updateAddress,
 } from "../redux/homeSlice";
 import { validateAddress } from "../common-utils/validations";
 import usePost from "../custom-hooks/usePost";
 import usePatch from "../custom-hooks/usePatch";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import useFetch from "../custom-hooks/useFetch";
 
 interface PropsType {
@@ -45,6 +46,7 @@ const AddressForm: React.FC<PropsType> = ({ open, onClose, mode }) => {
   const { create } = usePost();
   const update = usePatch();
   const { fetchById } = useFetch();
+  const dispatch = useAppDispatch();
 
   const { addressId, address } = useAppSelector((state) => state.home) as {
     addressId: number;
@@ -109,6 +111,10 @@ const AddressForm: React.FC<PropsType> = ({ open, onClose, mode }) => {
   useEffect(() => {
     if (addressId && mode === "update") {
       fetchById(getAddress, addressId as number);
+    }
+    if (mode === "create") {
+      dispatch(setAddressId(null));
+      setFormValues(values);
     }
   }, [addressId]);
 

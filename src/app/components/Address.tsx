@@ -47,6 +47,7 @@ const Address: React.FC<AddressProps> = ({ addresses }) => {
     modified.splice(targetIndex, 1, modifiedTarget);
     setAllAddress(modified);
     setAddress(modifiedTarget);
+    dispatch(setAddressId(id));
   };
 
   const addAddress = () => {
@@ -75,6 +76,7 @@ const Address: React.FC<AddressProps> = ({ addresses }) => {
       const addressesCopy = [...addresses];
       addressesCopy.splice(0, 1, latest);
       setAddress(latest);
+      dispatch(setAddressId(latest.id));
       setAllAddress(addressesCopy);
       return;
     } else setAddress(null);
