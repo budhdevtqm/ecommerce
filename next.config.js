@@ -11,6 +11,8 @@ const nextConfig = {
       "pk_test_51Ni8QKSCTH8hN1ApcaWIX7ejucWbSbhKiQixuBSixaYY8Y7JqddeZYgNwfBPjTtfLDwy3Yzh2ByWpio08FokXhjs00i94xHh38",
     STRIPE_SECRET:
       "sk_test_51Ni8QKSCTH8hN1Ap1a7Rg359ifaiaxOKkIZdbii24aCuVBjFxTTjdNqF2Aec1ENZcdYvyrW6tZKkRTZSGE7J93Do00jEKfFbSz",
+    EMAIL: "budhdevtqm@gmail.com",
+    EMAIL_PASSWORD: "higvoomsskwbndld",
   },
   devIndicators: {
     buildActivityPosition: "bottom-right",

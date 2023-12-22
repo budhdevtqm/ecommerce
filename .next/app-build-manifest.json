@@ -6,6 +6,12 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/product/place-order/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/product/place-order/[id]/page.css",
+      "static/chunks/app/product/place-order/[id]/page.js"
+    ],
     "/auth/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -16,16 +22,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/product/[id]/page": [
+    "/orders/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/product/[id]/page.js"
-    ],
-    "/product/place-order/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/product/place-order/[id]/page.css",
-      "static/chunks/app/product/place-order/[id]/page.js"
+      "static/chunks/app/orders/page.js"
     ]
   }
 }

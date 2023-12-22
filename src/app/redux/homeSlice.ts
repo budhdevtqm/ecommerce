@@ -70,6 +70,7 @@ interface PlaceOrderTypes {
   productId: number;
   amount: number;
   quantity: number;
+  addressId: number;
 }
 
 interface Initials {

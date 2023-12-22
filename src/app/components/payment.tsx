@@ -27,15 +27,13 @@ const CheckOutForm: React.FC<PaymentProps> = ({ amount }) => {
 
   const addressId = useAppSelector((state) => state.home.addressId) as number;
 
-  console.log({ productId, amount, addressId });
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (elements === null) {
       return;
     }
 
-    const values = { productId, amount, quantity: 1 };
+    const values = { productId, amount, quantity: 1, addressId };
 
     await create(placeOrder, values, "", "");
   };
