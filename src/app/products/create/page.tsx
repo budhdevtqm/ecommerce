@@ -16,6 +16,7 @@ import { useAppSelector } from "@/app/redux/hooks";
 import useFetch from "@/app/custom-hooks/useFetch";
 import { removeFile } from "@/app/common-utils/common-fns";
 import usePost from "@/app/custom-hooks/usePost";
+import { Toaster } from "react-hot-toast";
 
 const values = {
   name: "",
@@ -84,7 +85,7 @@ const AddProduct = () => {
     formData.append("quantity", formValues.quantity as string);
     formData.append("category", formValues.category);
     formData.append("description", formValues.description);
-    create(addProduct, formData, "/products", "Product");
+    create(addProduct, formData, "/products");
   };
 
   useEffect(() => {
@@ -221,6 +222,7 @@ const AddProduct = () => {
           </Button>
         </div>
       </form>
+      <Toaster />
     </FormCard>
   );
 };

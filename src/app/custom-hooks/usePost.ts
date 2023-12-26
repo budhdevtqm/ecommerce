@@ -1,21 +1,26 @@
 "use client";
 import { useAppDispatch } from "../redux/hooks";
 import { toast } from "react-hot-toast";
-import useNotify from "./useNotifty";
+import { useRouter } from "next/navigation";
 
 const usePost = () => {
   const dispatch = useAppDispatch();
-  const { checkStatus } = useNotify();
+  const router = useRouter();
 
-  const create = async (fn: any, values: any, path: string, prefix: string) => {
-    const response = await dispatch(fn(values));
+  const create = async (fn: any, values: any, path?: string) => {
+    const response: any = await dispatch(fn(values));
     if (response.type.includes("fulfilled")) {
-      toast.success(`${prefix} added`, { position: "top-right" });
+      console.log("home-atc", response);
+      toast.success(response.payload.data.message, { position: "top-right" });
+      if (path) {
+        setTimeout(() => router.push(path), 500);
+      }
       return;
     }
 
     if (response.type.includes("rejected")) {
-      // console.log()
+      toast.error(response.payload.message, { position: "top-right" });
+      return;
     }
   };
 

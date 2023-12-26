@@ -86,3 +86,8 @@ export const cartItemName = (name: string) => {
   if (name.length < 20) return name;
   return name.slice(0, 19);
 };
+
+export const isSingleItem = (qty: number) => {
+  if (qty <= 1) return "Item";
+  return "Items";
+};

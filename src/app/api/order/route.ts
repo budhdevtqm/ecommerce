@@ -11,12 +11,12 @@ export const GET = async (req: NextRequest) => {
 
     const userId = (users as RowDataPacket[])[0].id;
 
-    const myOrders = await pool.query("SELECT * FROM orders WHERE user_id=?", [
-      userId,
-    ]);
+    const [myOrders] = await pool.query(
+      "SELECT * FROM orders WHERE user_id=?",
+      [userId]
+    );
     return NextResponse.json({ data: myOrders }, { status: 200 });
   } catch (er) {
-    console.log("er", er);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 400 }

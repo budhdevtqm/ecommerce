@@ -39,7 +39,7 @@ const CreateUserForm = () => {
       setErrors(validationResults);
       return;
     }
-    await create(addUser, formValues, "/users", "User");
+    await create(addUser, formValues, "/users");
   };
 
   return (

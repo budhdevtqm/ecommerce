@@ -13,6 +13,7 @@ import {
 } from "../redux/categorySlice";
 import { useAppSelector } from "../redux/hooks";
 import useDelete from "../custom-hooks/useDelete";
+import { Toaster } from "react-hot-toast";
 
 const Categories: React.FC = () => {
   const { handleFetch } = useFetch();
@@ -22,8 +23,8 @@ const Categories: React.FC = () => {
     | FetchedCategory[]
     | [];
 
-  const deleteHandler = (id: number) => {
-    handleDelete(deleteCategory, id);
+  const deleteHandler = async (id: number) => {
+    await handleDelete(deleteCategory, id);
   };
 
   useEffect(() => {
@@ -113,6 +114,7 @@ const Categories: React.FC = () => {
             ))}
           </tbody>
         </table>
+        <Toaster />
       </div>
     </Wrapper>
   );

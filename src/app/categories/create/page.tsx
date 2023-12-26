@@ -6,6 +6,7 @@ import FormError from "@/app/components/FormError";
 import { CategoryValues, addCategory } from "@/app/redux/categorySlice";
 import { validateCategory } from "@/app/common-utils/validations";
 import usePost from "@/app/custom-hooks/usePost";
+import { Toaster } from "react-hot-toast";
 
 const CreateCategory: React.FC = () => {
   const [formValues, setFormValues] = useState<CategoryValues>({ name: "" });
@@ -25,7 +26,7 @@ const CreateCategory: React.FC = () => {
       setErrors(validationResults);
       return;
     }
-    await create(addCategory, formValues, "/categories", "Category");
+    await create(addCategory, formValues, "/categories");
   };
   return (
     <FormCard title="Create Category" navigate="/categories">
@@ -48,6 +49,7 @@ const CreateCategory: React.FC = () => {
           </Button>
         </div>
       </form>
+      <Toaster />
     </FormCard>
   );
 };

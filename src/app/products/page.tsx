@@ -15,6 +15,7 @@ import {
 } from "../redux/productSlice";
 import { useAppSelector } from "../redux/hooks";
 import useDelete from "../custom-hooks/useDelete";
+import { Toaster } from "react-hot-toast";
 
 const Products: React.FC = () => {
   const { handleFetch } = useFetch();
@@ -117,6 +118,7 @@ const Products: React.FC = () => {
           </tbody>
         </table>
       </div>
+      <Toaster />
     </Wrapper>
   );
 };

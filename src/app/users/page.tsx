@@ -6,9 +6,10 @@ import { MdEdit, MdDelete } from "react-icons/md";
 import { getDate, getTime } from "../common-utils/common-fns";
 import Link from "next/link";
 import useFetch from "../custom-hooks/useFetch";
-import { FetchedUser, deleteUser, getAllUsers } from "../redux/userSlice";
 import { useAppSelector } from "../redux/hooks";
 import useDelete from "../custom-hooks/useDelete";
+import { Toaster } from "react-hot-toast";
+import { FetchedUser, deleteUser, getAllUsers } from "../redux/userSlice";
 
 const Users: React.FC = () => {
   const { handleFetch } = useFetch();
@@ -17,7 +18,7 @@ const Users: React.FC = () => {
     | FetchedUser[]
     | [];
 
-  const deleteHandler = async (id: string) => {
+  const deleteHandler = async (id: number) => {
     await handleDelete(deleteUser, id);
     await handleFetch(getAllUsers);
   };
@@ -121,7 +122,7 @@ const Users: React.FC = () => {
                     </Link>
                     <MdDelete
                       title="Delete"
-                      onClick={() => deleteHandler(user.id as string)}
+                      onClick={() => deleteHandler(user.id as number)}
                     />
                   </span>
                 </td>
@@ -130,6 +131,7 @@ const Users: React.FC = () => {
           </tbody>
         </table>
       </div>
+      <Toaster />
     </Wrapper>
   );
 };

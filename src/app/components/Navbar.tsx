@@ -17,9 +17,6 @@ const Navbar: React.FC = () => {
   const userRole = getUserRole();
   const userEmail = getUserEmail();
 
-  console.log({ routes });
-  console.log("userRole", userRole);
-
   const filterLinks = () => {
     if (!userRole) {
       router.push("/auth");

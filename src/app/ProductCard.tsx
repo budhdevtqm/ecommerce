@@ -7,6 +7,7 @@ import { FaCircleInfo } from "react-icons/fa6";
 import Link from "next/link";
 import { Product, addToCart } from "./redux/homeSlice";
 import usePost from "./custom-hooks/usePost";
+import { Toaster } from "react-hot-toast";
 
 interface ProductCartProps {
   product: Product;
@@ -16,7 +17,7 @@ const ProductCard: React.FC<ProductCartProps> = ({ product }) => {
   const { create } = usePost();
 
   const addToCartHandler = async (product: Product) => {
-    await create(addToCart, product.id, "/", "Added to Cart");
+    await create(addToCart, product.id);
   };
 
   return (
@@ -57,6 +58,7 @@ const ProductCard: React.FC<ProductCartProps> = ({ product }) => {
           </Link>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

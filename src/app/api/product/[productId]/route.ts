@@ -60,29 +60,12 @@ export const GET = async (req: NextRequest) => {
       productId,
     ]);
 
-    const [inventory] = await pool.query(
-      "SELECT * FROM inventory WHERE product_id=?",
-      [productId]
-    );
-
-    const added = (inventory as Inventory[]).map(
-      (inventory: Inventory) => inventory.added
-    );
-
-    const rest = (inventory as Inventory[]).map(
-      (inventory: Inventory) => inventory.rest
-    );
-
-    const addedTotal = added.reduce((a, b) => a + b, 0);
-    const restTotal = rest.reduce((a, b) => a + b, 0);
-
-    const product = (products as Product[] | [])[0];
-
     return NextResponse.json(
-      { data: { ...product, total: addedTotal, rest: restTotal } },
+      { data: (products as Product[] | [])[0] },
       { status: 200 }
     );
   } catch (er) {
+    console.log("errrrr", er);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 400 }
@@ -129,15 +112,10 @@ export const DELETE = async (req: NextRequest) => {
   try {
     const productId = req.nextUrl.pathname.split("/").at(-1);
 
-    const deleted = await pool.query("DELETE from products WHERE id=?", [
-      productId,
-    ]);
+    await pool.query("DELETE from products WHERE id=?", [productId]);
 
-    console.log("deleted", deleted);
-
-    return NextResponse.json({ message: "deleted" }, { status: 200 });
+    return NextResponse.json({ message: "Product Deleted" }, { status: 200 });
   } catch (er) {
-    console.log("errrr----rrrrrr", er);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 400 }
