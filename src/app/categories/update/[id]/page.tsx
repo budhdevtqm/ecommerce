@@ -14,6 +14,7 @@ import { useParams } from "next/navigation";
 import useFetch from "@/app/custom-hooks/useFetch";
 import { useAppSelector } from "@/app/redux/hooks";
 import usePatch from "@/app/custom-hooks/usePatch";
+import { Toaster } from "react-hot-toast";
 
 const UpdateCategory: React.FC = () => {
   const [formValues, setFormValues] = useState<CategoryValues>({ name: "" });
@@ -40,7 +41,7 @@ const UpdateCategory: React.FC = () => {
       setErrors(validationResults);
       return;
     }
-    await update(upadteCategory, { ...formValues, id: categoryId });
+    await update(upadteCategory, { ...formValues, id: categoryId }, "/categories");
   };
 
   useEffect(() => {
@@ -75,6 +76,7 @@ const UpdateCategory: React.FC = () => {
           </Button>
         </div>
       </form>
+      <Toaster />
     </FormCard>
   );
 };

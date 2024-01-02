@@ -22,6 +22,7 @@ import { removeFile } from "@/app/common-utils/common-fns";
 import { MdCancel } from "react-icons/md";
 import { FaImage } from "react-icons/fa";
 import usePatch from "@/app/custom-hooks/usePatch";
+import { Toaster } from "react-hot-toast";
 
 const values = {
   name: "",
@@ -77,7 +78,7 @@ const UpdateProduct = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors(values);
     const validationResults = validateProduct(
@@ -100,7 +101,7 @@ const UpdateProduct = () => {
     formData.append("category", formValues.category);
     formData.append("description", formValues.description);
 
-    update(updateProduct, { formData, productId });
+    await update(updateProduct, { formData, productId }, "/products");
   };
 
   useEffect(() => {
@@ -326,6 +327,7 @@ const UpdateProduct = () => {
           </Button>
         </div>
       </form>
+      <Toaster />
     </FormCard>
   );
 };

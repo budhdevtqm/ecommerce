@@ -62,7 +62,7 @@ const Products: React.FC = () => {
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap text-center">
                     <Image
-                      src={`/upload/products/${product.images[0]}`}
+                      src={product.images.length > 0 ? `/upload/products/${product.images[0]}`: `/images/no-image.png`}
                       alt={product.name + "image"}
                       width={50}
                       height={50}

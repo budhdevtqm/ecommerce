@@ -18,12 +18,13 @@ const AddressCard: React.FC<PropsTypes> = (props) => {
     <div className="flex items-center gap-8 w-full">
       <span className=" w-[10%] flex items-center justify-center">
         <span
-          className="py-2  px-3 rounded hover:bg-gray-200 cursor-pointer"
+          className="py-2  px-3 rounded hover:bg-gray-200"
           onClick={() => handleSelectAddress(id)}
         >
           <input
             type="radio"
             name="address"
+            className="cursor-pointer"
             defaultChecked={checked ? true : false}
           />
         </span>

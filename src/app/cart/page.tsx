@@ -3,18 +3,26 @@ import React, { useEffect, useState } from "react";
 import Wrapper from "@/app/components/Wrapper";
 import PageHeader from "../components/PageHeader";
 import Button from "../components/Button";
-import Link from "next/link";
 import useFetch from "../custom-hooks/useFetch";
-import { CartItem, deleteCartItem, getAllCartItems } from "../redux/cartSlice";
-import { useAppSelector } from "../redux/hooks";
+import {
+  CartItem,
+  deleteCartItem,
+  getAllCartItems,
+  setCartProducts,
+} from "../redux/cartSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import CartCard from "./CartCard";
 import useDelete from "../custom-hooks/useDelete";
+import { useRouter } from "next/navigation";
 
 const CartPage: React.FC = () => {
   const [myCart, setMyCart] = useState<CartItem[] | []>([]);
   const [total, setTotal] = useState<number>(0);
+
   const { handleFetch } = useFetch();
   const handleDelete = useDelete();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const cartItems = useAppSelector((state) => state.cart.cartItems) as
     | CartItem[]
@@ -27,6 +35,11 @@ const CartPage: React.FC = () => {
   const deleteHandler = async (id: number) => {
     await handleDelete(deleteCartItem, id);
     await handleFetch(getAllCartItems);
+  };
+
+  const goToPlaceOrder = () => {
+    dispatch(setCartProducts(myCart));
+    router.push("/cart/place-order")
   };
 
   useEffect(() => {
@@ -58,7 +71,7 @@ const CartPage: React.FC = () => {
       {total !== 0 && (
         <div className="w-[90%] mx-auto flex items-center justify-end my-4">
           <div className="w-[60%] flex items-center justify-between pr-36">
-            <Button>Place Order</Button>
+            <Button onClick={goToPlaceOrder}>Place Order</Button>
             <span className="font-semibold text-[18px]">{`₹ ${total}`}</span>
           </div>
         </div>

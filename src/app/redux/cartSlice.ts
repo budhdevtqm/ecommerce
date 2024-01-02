@@ -24,11 +24,18 @@ interface updateQuantity {
 interface Initials {
   loading: boolean;
   cartItems: CartItem[] | [];
+  cartProducts: [];
+}
+
+interface OrderValues {
+  items: CartItem[];
+  addressId: number;
 }
 
 const initialState: Initials = {
   loading: false,
   cartItems: [],
+  cartProducts: [],
 };
 
 export const getAllCartItems = createAsyncThunk(
@@ -85,10 +92,34 @@ export const updateQuantity = createAsyncThunk(
   }
 );
 
+export const placeOrder = createAsyncThunk(
+  "/place-order",
+  async (values: OrderValues, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "/api/cart/place-order",
+        values,
+        headers
+      );
+      return response;
+    } catch (er) {
+      if (axios.isAxiosError(er)) {
+        return rejectWithValue(er.response?.data);
+      } else {
+        return rejectWithValue("An error occurred");
+      }
+    }
+  }
+);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    setCartProducts: (state, { payload }) => {
+      state.cartProducts = payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllCartItems.pending, (state) => {
@@ -101,4 +132,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { setCartProducts } = cartSlice.actions;
 export default cartSlice.reducer;

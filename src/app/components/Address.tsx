@@ -12,6 +12,7 @@ import {
 } from "../redux/homeSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import useDelete from "../custom-hooks/useDelete";
+import { Toaster } from "react-hot-toast";
 
 const first = {
   id: 1,
@@ -36,6 +37,7 @@ const Address: React.FC<AddressProps> = ({ addresses }) => {
 
   const dispatch = useAppDispatch();
   const deleteHandler = useDelete();
+  const { handleFetch } = useFetch();
 
   const handleSelectAddress = (id: number) => {
     const targetIndex = allAddress.findIndex((address) => address.id === id);
@@ -68,6 +70,7 @@ const Address: React.FC<AddressProps> = ({ addresses }) => {
 
   const handleDelete = async (id: number) => {
     await deleteHandler(deleteAddress, id);
+    await handleFetch(getMyAddresses);
   };
 
   useEffect(() => {
@@ -89,7 +92,14 @@ const Address: React.FC<AddressProps> = ({ addresses }) => {
 
   return (
     <React.Fragment>
-      {open && <AddressForm open={open} onClose={handleClose} mode={mode} />}
+      {open && (
+        <AddressForm
+          open={open}
+          onClose={handleClose}
+          mode={mode}
+          setOpen={setOpen}
+        />
+      )}
       <div className="flex flex-col p-8 bg-white shadow-lg">
         <div className="flex justify-between">
           <div className="my-2">
@@ -137,6 +147,7 @@ const Address: React.FC<AddressProps> = ({ addresses }) => {
           </div>
         )}
       </div>
+      <Toaster />
     </React.Fragment>
   );
 };

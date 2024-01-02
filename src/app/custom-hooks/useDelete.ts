@@ -6,6 +6,7 @@ const useDelete = () => {
 
   const handleDelete = async (fn: any, id: number) => {
     const response: any = await disptach(fn(id));
+    console.log("responseresponseresponse", response);
     if (response.type.includes("fulfilled")) {
       toast.success(response.payload.data.message, { position: "top-right" });
       return;

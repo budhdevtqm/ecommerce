@@ -12,6 +12,7 @@ import usePost from "../custom-hooks/usePost";
 import { placeOrder } from "../redux/homeSlice";
 import { useParams } from "next/navigation";
 import { useAppSelector } from "../redux/hooks";
+import { Toaster } from "react-hot-toast";
 
 interface PaymentProps {
   amount: number;
@@ -35,7 +36,7 @@ const CheckOutForm: React.FC<PaymentProps> = ({ amount }) => {
 
     const values = { productId, amount, quantity: 1, addressId };
 
-    await create(placeOrder, values, "", "");
+    await create(placeOrder, values, "/orders");
   };
   return (
     <div className="p-8 bg-white shadow-lg">
@@ -57,6 +58,7 @@ const CheckOutForm: React.FC<PaymentProps> = ({ amount }) => {
           </div>
         </form>
       </div>
+      <Toaster />
     </div>
   );
 };

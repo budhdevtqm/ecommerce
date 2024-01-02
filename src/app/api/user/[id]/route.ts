@@ -5,7 +5,7 @@ import { RowDataPacket } from "mysql2";
 
 export const GET = async (req: NextRequest) => {
   try {
-    const pathname = await req.nextUrl.pathname;
+    const pathname = req.nextUrl.pathname;
     const userId = pathname.split("/").at(-1);
     const [rows] = await pool.query("SELECT * FROM users WHERE id=?", [userId]);
     const rowData: RowDataPacket[] = rows as RowDataPacket[];
@@ -25,16 +25,15 @@ export const GET = async (req: NextRequest) => {
 
 export const PATCH = async (req: NextRequest) => {
   try {
-    const pathname = await req.nextUrl.pathname;
+    const pathname = req.nextUrl.pathname;
     const userId = pathname.split("/").at(-1);
     const { name, password, role } = await req.json();
     const hash = await bcrypt.hash(password, 10);
 
     await pool.query(
-      `UPDATE users SET name =?, role =?, password =?, stauts =?, WHERE id = ${userId}`,
-      [name, role, hash, "1"]
+      `UPDATE users SET name =?, role =?, password =?, status =? WHERE id = ?`,
+      [name, role, hash, 1, userId]
     );
-
     return NextResponse.json(
       { status: 200, message: "User Updated" },
       { status: 200 }
@@ -49,7 +48,7 @@ export const PATCH = async (req: NextRequest) => {
 
 export const DELETE = async (req: NextRequest) => {
   try {
-    const pathname = await req.nextUrl.pathname;
+    const pathname = req.nextUrl.pathname;
     const userId = pathname.split("/").at(-1);
     await pool.query("DELETE FROM users WHERE id=?", [userId]);
     return NextResponse.json(

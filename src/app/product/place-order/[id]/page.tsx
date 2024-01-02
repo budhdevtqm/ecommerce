@@ -19,11 +19,10 @@ const OrderForm: React.FC = () => {
   const product = useAppSelector((state) => state.home.product) as Product;
   const { handleFetch, fetchById } = useFetch();
 
-  let { addresses, addressId } = useAppSelector((state) => state.home) as {
+  const { addresses, addressId } = useAppSelector((state) => state.home) as {
     addresses: AddressTypes[];
     addressId: number;
   };
-
 
   useEffect(() => {
     if (id) {

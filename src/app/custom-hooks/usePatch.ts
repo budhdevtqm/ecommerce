@@ -1,20 +1,23 @@
+import toast from "react-hot-toast";
 import { useAppDispatch } from "../redux/hooks";
+import { useRouter } from "next/navigation";
 
 const usePatch = () => {
   const dispatch = useAppDispatch();
-  //   const navigate = useNavigate();
+  const router = useRouter();
 
-  const update = async (fn: any, values: any) => {
+  const update = async (fn: any, values: any, path?: string) => {
     const response = await dispatch(fn(values));
 
     if (response.type?.includes("fulfilled")) {
-      console.log("ffilled");
-      //   successToast("update");
+      toast.success(response.payload.data.message, { position: "top-right" });
+      if (path) {
+        setTimeout(() => router.push(path), 500);
+      }
     }
 
     if (response.type?.includes("rejected")) {
-      console.log("update-rejected");
-      //   verifyStatus(response.payload.status, navigate);
+      toast.error(response.payload.message, { position: "top-right" });
     }
   };
   return update;

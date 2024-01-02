@@ -6,36 +6,13 @@ import Image from "next/image";
 import { MdShoppingCart } from "react-icons/md";
 import { useParams, useRouter } from "next/navigation";
 import useFetch from "@/app/custom-hooks/useFetch";
-import { getSingleProduct, Product } from "@/app/redux/homeSlice";
-import { useAppSelector } from "@/app/redux/hooks";
-
-const product = {
-  _id: "lakdjsfl;ajd;lkfajdfk",
-  name: "Watch",
-  images: ["/images/user.png", "/images/watch.jpeg"],
-  price: 999,
-  status: true,
-  description:
-    "TIMEWEAR New Track Number Dial, Day & Date, Brown Leather Strap Analog Watch - For Men 305WDTG",
-  createdAt: new Date().getTime(),
-  updatedAt: new Date().getTime(),
-  discount: 10,
-};
-
-const images = [
-  "/images/user.png",
-  "/images/watch.jpeg",
-  "/images/watch.jpeg",
-  "/images/watch.jpeg",
-  "/images/user.png",
-  "/images/watch.jpeg",
-  "/images/watch.jpeg",
-  "/images/watch.jpeg",
-];
+import { addToCart, getSingleProduct, Product } from "@/app/redux/homeSlice";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 
 const ViewProduct = () => {
   const [img, setImg] = useState("");
   const { fetchById } = useFetch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const id = useParams().id as string;
 
@@ -43,8 +20,9 @@ const ViewProduct = () => {
     (state) => state.home.product
   ) as Product | null;
 
-  const addToCartHandler = (id: number) => {
+  const addToCartHandler = async (id: number) => {
     console.log("add-to-cart-id", id);
+    await dispatch(addToCart(`${id}`));
   };
 
   useEffect(() => {

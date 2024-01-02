@@ -14,6 +14,7 @@ import FormError from "@/app/components/FormError";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import usePatch from "@/app/custom-hooks/usePatch";
+import { Toaster } from "react-hot-toast";
 
 const values = {
   name: "",
@@ -26,7 +27,7 @@ const UpdateUserForm = () => {
   const [formValues, setFormValues] = useState<UserValues>(values);
   const [errors, setErrors] = useState<Partial<UserValues>>(values);
 
-  const { update } = usePatch();
+  const update = usePatch();
   const userId = useParams().id;
   const dispatch = useAppDispatch();
   const user = useAppSelector(
@@ -51,7 +52,7 @@ const UpdateUserForm = () => {
       setErrors(validationResults);
       return;
     }
-    await update(updateUser, { ...formValues, id: userId });
+    await update(updateUser, { ...formValues, id: userId }, "/users");
   };
 
   useEffect(() => {
@@ -126,6 +127,7 @@ const UpdateUserForm = () => {
           </Button>
         </div>
       </form>
+      <Toaster />
     </FormCard>
   );
 };

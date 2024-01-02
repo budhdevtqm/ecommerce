@@ -80,14 +80,14 @@ const Users: React.FC = () => {
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
-                    {getDate(user.createdAt)}
+                    {getDate(user?.created_at)}
                   </p>
                   <p className="text-gray-600 whitespace-no-wrap">
-                    {getTime(user.createdAt)}
+                    {getTime(user?.created_at)}
                   </p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {user.status == "1" ? (
+                  {user.status == 1 ? (
                     <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
                       <span
                         aria-hidden

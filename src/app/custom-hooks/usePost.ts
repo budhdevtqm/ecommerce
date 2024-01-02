@@ -10,7 +10,6 @@ const usePost = () => {
   const create = async (fn: any, values: any, path?: string) => {
     const response: any = await dispatch(fn(values));
     if (response.type.includes("fulfilled")) {
-      console.log("home-atc", response);
       toast.success(response.payload.data.message, { position: "top-right" });
       if (path) {
         setTimeout(() => router.push(path), 500);

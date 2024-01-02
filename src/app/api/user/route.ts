@@ -54,10 +54,10 @@ export const POST = async (req: NextRequest) => {
     const hash = await bcrypt.hash(password, 10);
     await pool.query(
       "INSERT INTO  users (name, email, password, role, status) VALUES (?,?,?,?,?)",
-      [name, email, hash, role, true]
+      [name, email, hash, role, 1]
     );
 
-    return NextResponse.json({ message: "Added" }, { status: 201 });
+    return NextResponse.json({ message: "User added" }, { status: 201 });
   } catch (er) {
     NextResponse.json({ message: "something went worng!" }, { status: 400 });
   }

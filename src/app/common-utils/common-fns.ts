@@ -1,7 +1,4 @@
 "use client";
-
-import { CartItem } from "../redux/cartSlice";
-
 export const getDate = (stamp: string) => new Date(stamp).toDateString();
 export const getTime = (stamp: string) => new Date(stamp).toLocaleTimeString();
 

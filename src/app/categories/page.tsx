@@ -25,6 +25,7 @@ const Categories: React.FC = () => {
 
   const deleteHandler = async (id: number) => {
     await handleDelete(deleteCategory, id);
+    await handleFetch(getAllCategory);
   };
 
   useEffect(() => {

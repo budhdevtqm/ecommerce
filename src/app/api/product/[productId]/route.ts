@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/dbConfig/db";
-import { OkPacket } from "mysql";
-import { FetchedProduct } from "@/app/redux/productSlice";
 import path from "path";
 import fs from "fs/promises";
-
-interface Inventory {
-  id: number;
-  product_id: number;
-  added: number;
-  rest: number;
-}
 
 interface Product {
   id: number;
@@ -65,7 +56,6 @@ export const GET = async (req: NextRequest) => {
       { status: 200 }
     );
   } catch (er) {
-    console.log("errrrr", er);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 400 }
@@ -99,7 +89,7 @@ export const PATCH = async (req: NextRequest) => {
       ]
     )) as any;
 
-    return NextResponse.json({ message: "updated" }, { status: 200 });
+    return NextResponse.json({ message: "Product updated" }, { status: 200 });
   } catch (er) {
     return NextResponse.json(
       { message: "Something went wrong" },
