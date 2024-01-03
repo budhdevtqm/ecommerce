@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
 import pool from "@/dbConfig/db";
+import { RowDataPacket } from "mysql2";
 
 export const fileUploder = async (files: File[] | [], uploadPath: string) => {
   const filesArrayBuffer = await Promise.all(
@@ -69,9 +70,28 @@ export const POST = async (req: NextRequest) => {
   }
 };
 
-export const GET = async () => {
+export const GET = async (req: NextRequest) => {
   try {
-    const [products] = await pool.query("SELECT * FROM products");
+    const userEmail = req.headers.get("userEmail");
+    const [users] = await pool.query("SELECT * FROM users WHERE email=?", [
+      userEmail,
+    ]);
+
+    const { role, id: userId } = (users as RowDataPacket[])[0];
+    let query = "";
+    let values: string[] | [] = [];
+
+    if (role === "admin") {
+      query = "SELECT * FROM products";
+      values = [];
+    }
+
+    if (role === "seller") {
+      query = "SELECT * FROM products WHERE created_by=?";
+      values = [userId];
+    }
+
+    const [products] = await pool.query(query, values);
     return NextResponse.json({ data: products }, { status: 200 });
   } catch (er) {
     return NextResponse.json(

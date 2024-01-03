@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Product, addToCart } from "./redux/homeSlice";
 import usePost from "./custom-hooks/usePost";
 import { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface ProductCartProps {
   product: Product;
@@ -15,6 +16,7 @@ interface ProductCartProps {
 
 const ProductCard: React.FC<ProductCartProps> = ({ product }) => {
   const { create } = usePost();
+  const router = useRouter();
 
   const addToCartHandler = async (product: Product) => {
     await create(addToCart, product.id);
@@ -22,8 +24,8 @@ const ProductCard: React.FC<ProductCartProps> = ({ product }) => {
 
   return (
     <div className="bg-white rounded shadow w-[200px] flex items-center justify-center py-2">
-      <div>
-        <div className="border border-gray-200 p-1 flex items-center justify-center">
+      <div className="h-[350px]">
+        <div className="border border-gray-200 p-1 flex items-center justify-center h-[250px]">
           <Image
             src={`/upload/products/${product.images[0]}`}
             width={150}
@@ -50,12 +52,12 @@ const ProductCard: React.FC<ProductCartProps> = ({ product }) => {
               onClick={() => addToCartHandler(product)}
             />
           </span>
-          <Link
-            href={`/product/${product.id}`}
+          <span
+            onClick={() => router.push(`/product/${product.id}`)}
             className="bg-white text-gray-400 text-[20px] mt-[2px] cursor-pointer hover:text-gray-500"
           >
             <FaCircleInfo title="More info..." />
-          </Link>
+          </span>
         </div>
       </div>
       <Toaster />

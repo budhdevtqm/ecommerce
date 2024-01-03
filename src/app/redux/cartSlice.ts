@@ -119,6 +119,9 @@ const cartSlice = createSlice({
     setCartProducts: (state, { payload }) => {
       state.cartProducts = payload;
     },
+    setCartItems: (state, { payload }) => {
+      state.cartItems = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -132,5 +135,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const { setCartProducts } = cartSlice.actions;
+export const { setCartProducts, setCartItems } = cartSlice.actions;
 export default cartSlice.reducer;

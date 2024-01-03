@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/dbConfig/db";
 import path from "path";
 import fs from "fs/promises";
+import { RowDataPacket } from "mysql2";
 
 interface Product {
   id: number;
@@ -73,9 +74,23 @@ export const PATCH = async (req: NextRequest) => {
     const description = formData.get("description");
     const quantity = Number(formData.get("quantity"));
     const files = formData.getAll("files") as File[] | [];
-    const fileNames = await fileUploder(files, "products");
+    let fileNames;
 
-    (await pool.query(
+    const [products] = await pool.query("SELECT * FROM products WHERE id=?", [
+      productId,
+    ]);
+
+    const product = (products as RowDataPacket[])[0];
+
+    if (files.length > 0) {
+      fileNames = await fileUploder(files, "products");
+    }
+
+    if (files.length === 0) {
+      fileNames = product.images;
+    }
+
+    await pool.query(
       `UPDATE products SET name=?, category=?, price=?, description=?, status=?, created_by=?, quantity=?, images=? WHERE id=${productId}`,
       [
         name,
@@ -87,7 +102,7 @@ export const PATCH = async (req: NextRequest) => {
         Number(quantity),
         JSON.stringify(fileNames),
       ]
-    )) as any;
+    );
 
     return NextResponse.json({ message: "Product updated" }, { status: 200 });
   } catch (er) {

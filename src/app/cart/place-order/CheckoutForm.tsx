@@ -9,8 +9,8 @@ import {
 } from "@stripe/react-stripe-js";
 import Button from "@/app/components/Button";
 import usePost from "@/app/custom-hooks/usePost";
-import { placeOrder } from "@/app/redux/cartSlice";
-import { useAppSelector } from "@/app/redux/hooks";
+import { placeOrder, setCartItems } from "@/app/redux/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { Toaster } from "react-hot-toast";
 import { CartItem } from "@/app/redux/cartSlice";
 
@@ -24,6 +24,7 @@ const CheckOutForm: React.FC<PaymentProps> = ({ amount }) => {
   const stripe = useStripe();
   const elements = useElements();
   const { create } = usePost();
+  const dispatch = useAppDispatch();
 
   const addressId = useAppSelector((state) => state.home.addressId) as number;
   const items = useAppSelector((state) => state.cart.cartProducts) as
@@ -36,10 +37,10 @@ const CheckOutForm: React.FC<PaymentProps> = ({ amount }) => {
       return;
     }
 
-    const values = { addressId, items };
-    //  "/orders"
-
-    await create(placeOrder, values,);
+    const response = await create(placeOrder, { addressId, items }, "/orders");
+    if (response.type.includes("fulfilled")) {
+      dispatch(setCartItems([]));
+    }
   };
 
   return (

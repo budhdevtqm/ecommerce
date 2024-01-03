@@ -39,7 +39,7 @@ const CartPage: React.FC = () => {
 
   const goToPlaceOrder = () => {
     dispatch(setCartProducts(myCart));
-    router.push("/cart/place-order")
+    router.push("/cart/place-order");
   };
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const CartPage: React.FC = () => {
     <Wrapper>
       <PageHeader title="My Cart" />
       <div>
-        {myCart &&
+        {myCart.length > 0 ? (
           myCart.map((i: CartItem) => (
             <CartCard
               key={i.id}
@@ -66,7 +66,12 @@ const CartPage: React.FC = () => {
               setMyCart={setMyCart}
               setTotal={setTotal}
             />
-          ))}
+          ))
+        ) : (
+          <div className="flex items-center justify-center min-h-[300px]">
+            <h1 className="font-bold text-[20px]">No Cart Items Yet!</h1>
+          </div>
+        )}
       </div>
       {total !== 0 && (
         <div className="w-[90%] mx-auto flex items-center justify-end my-4">

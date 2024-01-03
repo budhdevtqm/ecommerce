@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { fetchCategory } from "./categorySlice";
 import { create } from "domain";
+import { headers } from "../common-utils/common-fns";
 
 export interface File {
   lastModified: number;
@@ -64,23 +65,11 @@ const initialState: InitialTypes = {
   product: null,
 };
 
-// export const addToCart = createAsyncThunk("/add-to-cart", async(id:number, {rejectWithValue})=>{
-// try {
-//   const response = await axios.post('/api')
-// } catch (er) {
-//   if (axios.isAxiosError(er)) {
-//     return rejectWithValue(er.response?.data);
-//   } else {
-//     return rejectWithValue("An error occurred");
-//   }
-// }
-// })
-
 export const getAllProducts = createAsyncThunk(
   "/get-all-products",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/product");
+      const response = await axios.get("/api/product", headers);
       return response;
     } catch (er) {
       if (axios.isAxiosError(er)) {

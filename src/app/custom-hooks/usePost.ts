@@ -14,12 +14,12 @@ const usePost = () => {
       if (path) {
         setTimeout(() => router.push(path), 500);
       }
-      return;
+      return response;
     }
 
     if (response.type.includes("rejected")) {
       toast.error(response.payload.message, { position: "top-right" });
-      return;
+      return response;
     }
   };
 

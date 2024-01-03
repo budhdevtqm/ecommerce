@@ -19,7 +19,7 @@ const Home: React.FC = () => {
   }, []);
   return (
     <Wrapper>
-      <ProductFilter />
+      {/* <ProductFilter /> */}
       <div className="grid grid-rows-1 grid-cols-6 my-8 gap-8">
         {products &&
           products.map((p: Product) => (

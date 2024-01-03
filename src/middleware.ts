@@ -14,23 +14,34 @@ export async function middleware(request: NextRequest) {
     const { payload } = await jose.jwtVerify(token, secret);
     const { userRole } = payload;
 
-    if (pathname.includes("/users") && userRole === "admin") {
+    const allRole =
+      userRole === "user" || userRole === "admin" || userRole === "seller";
+
+    const admin = userRole === "admin";
+    const seller = userRole === "seller";
+    const user = userRole === "user";
+
+    if (pathname.includes("/users") && admin) {
       return NextResponse.next();
     }
 
-    if (pathname.includes("/categories") && userRole !== "user") {
+    if (pathname.includes("/categories") && (seller || admin)) {
       return NextResponse.next();
     }
 
-    if (pathname.includes("/products") && userRole !== "user") {
+    if (pathname.includes("/products") && userRole !== user) {
       return NextResponse.next();
     }
 
-    if (pathname === "/") {
+    if (pathname === "/" && allRole) {
+      return NextResponse.next();
+    }
+    if (pathname === "/cart" && allRole) {
       return NextResponse.next();
     }
 
-    if (pathname === "/cart") {
+
+    if (pathname === "/users" && admin) {
       return NextResponse.next();
     }
 
@@ -45,7 +56,7 @@ export const config = {
     "/users/:path*",
     "/categories/:path*",
     "/products/:path*",
+    "/cart/:path*",
     "/",
-    "/cart",
   ],
 };

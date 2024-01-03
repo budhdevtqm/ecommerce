@@ -9,19 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       screens: {
-        'sm': '640px',
+        sm: "640px",
         // => @media (min-width: 640px) { ... }
-  
-        'md': '768px',
+
+        md: "768px",
         // => @media (min-width: 768px) { ... }
-  
-        'lg': '1024px',
+
+        lg: "1024px",
         // => @media (min-width: 1024px) { ... }
-  
-        'xl': '1280px',
+
+        xl: "1280px",
         // => @media (min-width: 1280px) { ... }
-  
-        '2xl': '1536px',
+
+        "2xl": "1536px",
         // => @media (min-width: 1536px) { ... }
       },
       // screens: {
@@ -36,8 +36,13 @@ const config: Config = {
       // },
       colors: {
         primary: "#82b440",
+        navBg: "#4082c7",
         textPrimary: "#111111",
         blackColor: "#000000e6",
+        activeColor: "#82C740",
+      },
+      spacing: {
+        "12": "grid-template-rows: repeat(12, minmax(0, 1fr))",
       },
     },
   },
